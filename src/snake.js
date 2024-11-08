@@ -8,6 +8,8 @@
  */
 function initSnake() {
   // A compléter
+  let array = {x: 3, y: 5}
+  return array;
 }
 
 /**
