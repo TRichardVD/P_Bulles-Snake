@@ -69,4 +69,11 @@ function moveSnake(snake, direction, box) {
  */
 function drawSnake() {
   // A compléter
+  const canvas = document.getElementById("gameCanvas");
+  if (canvas.getContext) {
+    const ctx = canvas.getContext("2d");
+  }
+
+  ctx.fillRect(1, 1, 100, 100);
+
 }

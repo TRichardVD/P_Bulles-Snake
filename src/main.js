@@ -28,6 +28,9 @@ function startGame() {
 
 function draw() {
   // A compléter
+  snake.drawSnake();
+
+
 }
 
 startGame();
