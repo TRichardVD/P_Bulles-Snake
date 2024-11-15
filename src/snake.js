@@ -45,12 +45,24 @@ function moveSnake(snake, direction, box) {
       break;
     }
 
-    for(let i = 0; i < snake.length - 1; i++) {
-    
-      if (i != 0) {
-        
-      
+  for(let i = 1; i < snake.length - 1; i++) {
+    if (snake[i].x > snake[i - 1].x) 
+    {
+      snake[i].x--
     }
+    else if (snake[i].x < snake[i - 1].x)
+    {
+      snake[i].x++
+    }
+    else if (snake[i].y > snake[i - 1].y)
+    {
+      snake[i].y--
+    }
+    else if (snake[i].y > snake[i - 1].y)
+    {
+      snake[i].y++
+    }
+    
   }
   return snake[0]
 }
@@ -74,6 +86,6 @@ function drawSnake() {
     const ctx = canvas.getContext("2d");
   }
 
-  ctx.fillRect(1, 1, 100, 100);
+  ctx.fillRect(56, 56, 100, 100);
 
 }
