@@ -48,19 +48,19 @@ function moveSnake(snake, direction, box) {
   for(let i = 1; i < snake.length - 1; i++) {
     if (snake[i].x > snake[i - 1].x) 
     {
-      snake[i].x--
+      snake[i].x -= box
     }
     else if (snake[i].x < snake[i - 1].x)
     {
-      snake[i].x++
+      snake[i].x += box
     }
     else if (snake[i].y > snake[i - 1].y)
     {
-      snake[i].y--
+      snake[i].y -= box
     }
     else if (snake[i].y > snake[i - 1].y)
     {
-      snake[i].y++
+      snake[i].y += box
     }
     
   }
@@ -79,20 +79,15 @@ function moveSnake(snake, direction, box) {
  * @param {Array<{x: number, y: number}>} snake - Un tableau représentant le serpent, où chaque élément est un segment avec des coordonnées `x` et `y`.
  * @param {number} box - La taille d'une case de la grille en pixels, utilisée pour déterminer la taille de chaque segment du serpent.
  */
-function drawSnake() {
+function drawSnake(ctx, snake, box) {
   // A compléter
-  const canvas = document.getElementById("gameCanvas");
-  if (canvas.getContext) {
-    const ctx = canvas.getContext("2d");
+ 
+  array.forEach(element => {
 
-    array.forEach(element => {
-      ctx.fillRect(56, 56, 100, 100);
-      
-    });
-  }
-
-
-
+    ctx.fillRect(box, box, box * snake.x, box * snake.y);
+    
+  });
+  
 }
 
 export { initSnake, moveSnake, drawSnake };
