@@ -84,8 +84,15 @@ function drawSnake() {
   const canvas = document.getElementById("gameCanvas");
   if (canvas.getContext) {
     const ctx = canvas.getContext("2d");
+
+    array.forEach(element => {
+      ctx.fillRect(56, 56, 100, 100);
+      
+    });
   }
 
-  ctx.fillRect(56, 56, 100, 100);
+
 
 }
+
+export { initSnake, moveSnake, drawSnake };

@@ -10,3 +10,7 @@
 function drawScore() {
   // A compléter
 }
+
+export {
+  drawScore
+}

@@ -30,3 +30,7 @@ function checkCollision() {
 function checkWallCollision() {
   // A compléter
 }
+
+export {
+  checkCollision, checkWallCollision
+}
