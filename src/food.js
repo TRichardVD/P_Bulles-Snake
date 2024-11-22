@@ -32,8 +32,9 @@ function generateFood(box, canvas) {
  * @param {{x: number, y: number}} food - Un objet contenant les coordonnées `x` et `y` où la nourriture doit être dessinée.
  * @param {number} box - La taille d'une case de la grille en pixels, utilisée pour déterminer la taille de la nourriture.
  */
-function drawFood() {
+function drawFood(ctx, food, box) {
   // A compléter
+  ctx.fillRect(food.x*box, food.y*box, box, box)
 }
 
 export {
