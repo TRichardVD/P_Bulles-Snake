@@ -13,10 +13,10 @@ function generateFood(box, canvas) {
   // A compléter
 
   let position = {x: undefined, y: undefined}
-  
+
   position.x = Math.floor(Math.random() * (canvas.width/box + 1)) 
   position.y = Math.floor(Math.random() * (canvas.height/box + 1))
-
+  
   return position;
 
 }
@@ -38,5 +38,6 @@ function drawFood(ctx, food, box) {
 }
 
 export {
-  generateFood, drawFood
+  generateFood,
+  drawFood
 }

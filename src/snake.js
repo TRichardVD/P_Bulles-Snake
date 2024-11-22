@@ -8,7 +8,7 @@
  */
 function initSnake() {
   // A compléter
-  let array = {x: 3, y: 5}
+  let array = [{x: 3, y: 5}]
   return array;
 }
 
@@ -82,11 +82,9 @@ function moveSnake(snake, direction, box) {
 function drawSnake(ctx, snake, box) {
   // A compléter
  
-  array.forEach(element => {
-
-    ctx.fillRect(box * snake.x, box * snake.y, box, box);
-    
-  });
+  for (const s of snake) {
+    ctx.fillRect(box * s.x, box * s.y, box, box);
+  }
   
 }
 
