@@ -12,27 +12,28 @@
  */
 function handleDirectionChange(event, currentDirection) {
   // A compléter
+
   switch (event.key) {
-    case 'DOWN' :
-      if (currentDirection !== 'UP')
-        return "DOWN"
-      break;
+    case 'ArrowDown' :
+      if (currentDirection != 'UP')
+        return "DOWN";
 
-    case 'UP' :
+    case 'ArrowUp' :
       if (currentDirection !== 'DOWN')
-        return "UP"
-      break;
+        return "UP";
 
-    case 'LEFT' :
+
+    case 'ArrowLeft' :
       if (currentDirection !== 'RIGHT')
-        return "LEFT"
-      break;
+        return "LEFT";
 
-    case 'RIGHT' :
+    case 'ArrowRight' :
       if (currentDirection !== 'LEFT')
-        return "RIGHT"
-      break;
+        return "RIGHT";
+      
 
+      default :
+        return currentDirection;
   }
 }
 

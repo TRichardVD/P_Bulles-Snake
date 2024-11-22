@@ -7,9 +7,7 @@
  * @returns {Array<{x: number, y: number}>} - Un tableau contenant un objet représentant la position du premier segment du serpent.
  */
 function initSnake() {
-  // A compléter
-  let array = [{x: 3, y: 5}]
-  return array;
+  return [{x: 5, y: 5}, {x: 4, y: 5}, {x: 3, y: 5}]
 }
 
 /**
@@ -25,46 +23,28 @@ function initSnake() {
  * @returns {{x: number, y: number}} - Un objet représentant les nouvelles coordonnées `x` et `y` de la tête du serpent après le déplacement.
  */
 function moveSnake(snake, direction, box) {
-  // A compléter
+  const newHead = {x: snake[0].x, y: snake[0].y};
 
+  // Modifier la position de la tête du serpent
   switch(direction) {
     case 'UP' :
-      snake[0].y -= box
+      newHead.y--;
       break;
 
     case 'LEFT':
-      snake[0].x -= box
+      newHead.x--;
       break;
 
     case 'RIGHT':
-      snake[0].x += box
+      newHead.x++;
       break;
     
     case 'DOWN':
-      snake[0].y += box
+      newHead.y++;
       break;
     }
 
-  for(let i = 1; i < snake.length - 1; i++) {
-    if (snake[i].x > snake[i - 1].x) 
-    {
-      snake[i].x -= box
-    }
-    else if (snake[i].x < snake[i - 1].x)
-    {
-      snake[i].x += box
-    }
-    else if (snake[i].y > snake[i - 1].y)
-    {
-      snake[i].y -= box
-    }
-    else if (snake[i].y > snake[i - 1].y)
-    {
-      snake[i].y += box
-    }
-    
-  }
-  return snake[0]
+    return newHead;
 }
 
 /**
@@ -80,9 +60,8 @@ function moveSnake(snake, direction, box) {
  * @param {number} box - La taille d'une case de la grille en pixels, utilisée pour déterminer la taille de chaque segment du serpent.
  */
 function drawSnake(ctx, snake, box) {
-  // A compléter
  
-  for (const s of snake) {
+  for (let s of snake) {
     ctx.fillRect(box * s.x, box * s.y, box, box);
   }
   

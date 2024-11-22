@@ -26,12 +26,19 @@ function startGame() {
   gameInterval = setInterval(draw, gameSpeed); // Stockage de l'identifiant de l'intervalle
 }
 
-function draw() {
-  // A compléter
+function draw() {  
+  
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
+  snake.unshift(moveSnake(snake, direction, box));
+  snake.pop();
+
+  // Afficher les valeurs
   drawSnake(ctx, snake, box);
   drawFood(ctx, snake, box);
   drawScore();
-
 }
 
 startGame();
