@@ -15,30 +15,22 @@ function handleDirectionChange(event, currentDirection) {
   switch (event.key) {
     case 'DOWN' :
       if (currentDirection !== 'UP')
-        return DOWN
-      else
-        return currentDirection
+        return "DOWN"
       break;
 
     case 'UP' :
       if (currentDirection !== 'DOWN')
-        return UP
-      else
-        return currentDirection
+        return "UP"
       break;
 
     case 'LEFT' :
       if (currentDirection !== 'RIGHT')
-        return LEFT
-      else
-        return currentDirection
+        return "LEFT"
       break;
-      
+
     case 'RIGHT' :
       if (currentDirection !== 'LEFT')
-        return RIGHT
-      else
-        return currentDirection
+        return "RIGHT"
       break;
 
   }
