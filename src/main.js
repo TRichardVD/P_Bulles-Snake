@@ -29,7 +29,8 @@ function startGame() {
 function draw() {
   // A compléter
   drawSnake();
-
+  drawFood();
+  drawScore();
 
 }
 
