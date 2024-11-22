@@ -84,7 +84,7 @@ function drawSnake(ctx, snake, box) {
  
   array.forEach(element => {
 
-    ctx.fillRect(box, box, box * snake.x, box * snake.y);
+    ctx.fillRect(box * snake.x, box * snake.y, box, box);
     
   });
   
