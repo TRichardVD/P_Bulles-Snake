@@ -12,10 +12,10 @@
 function generateFood(box, canvas) {
   // A compléter
 
-  position = {x: undefined, y: undefined}
+  let position = {x: undefined, y: undefined}
   
-  position.x = Math.floor(Math.Random() * (canvas.width/box + 1)) 
-  position.y = Math.floor(Math.Random() * (canvas.height/box + 1))
+  position.x = Math.floor(Math.random() * (canvas.width/box + 1)) 
+  position.y = Math.floor(Math.random() * (canvas.height/box + 1))
 
   return position;
 
