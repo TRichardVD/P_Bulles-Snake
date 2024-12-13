@@ -32,9 +32,9 @@ function checkCollision(head, snakeArray) {
 function checkWallCollision(head, canvas, box) {
   // Si collision avec les murs retourner 'true'
   if (head.x * box >= canvas.width
-    || head.x * box <= 0
+    || head.x * box + 1 <= 0
     || head.y * box >= canvas.height
-    || head.y * box <= 0) 
+    || head.y * box + 1 <= 0) 
       return true;
     
     // sinon retourner 'false'

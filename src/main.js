@@ -41,7 +41,7 @@ function draw() {
   if (checkCollision(newHead, snake) || checkWallCollision(newHead, canvas, box))
     {
       clearInterval(gameInterval);
-      console.log(`stop game. Score : ${score}`)
+      console.log(`Fin du jeu. Score : ${score}`)
     }
 
   if (food.x === newHead.x && food.y === newHead.y)
@@ -50,7 +50,7 @@ function draw() {
     food = undefined;
     food = generateFood(box, canvas)
     snake.push({x: snake[snake.length - 1].x, 
-                   y: snake[snake.length - 1].y})
+                y: snake[snake.length - 1].y})
   }
 
   // Afficher les objets
