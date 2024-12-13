@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jeu du Serpent</title>
+    
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+      
       body {
         display: flex;
         justify-content: center;
@@ -17,10 +20,45 @@
         border: 2px solid #000;
         background-color: #fff;
       }
+      #menuPause {
+        font-family: 'Kanit', 'Arial';
+        position: absolute;
+        justify-content: center;
+        align-items: center;
+        background-color: cyan;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+      }
+      #startButton {
+        width: 100%;
+        background-color: aliceblue;
+        border-radius: 10px;
+        border-style: none;
+        box-shadow: none;
+        padding : 10px;
+        
+      }
+      #startButton:hover {
+        background-color: rgb(177, 177, 177);
+        transition-duration: 1000ms;
+      }
+      .Stat {
+        display: none;
+      }
+
     </style>
   </head>
   <body>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="menuPause">
+      <h2 id="PauseMenuTitle">Bienvenue</h2>
+      <div class="Stat">
+        <p>Votre score est de : <strong id="score"></strong></p>
+        <p>Temps écoulé : <strong id="timer"></strong></p>
+      </div>
+      <button type="button" id="startButton" >Lancer le jeu</button>
+    </div>
     <script type="module" src="./src/main.js"></script>
   </body>
 </html>

@@ -14,14 +14,23 @@ let food;
 let direction = "RIGHT";
 let score = 0;
 let gameInterval; // Variable pour stocker l'identifiant de l'intervalle
+let DateOfStart = Date.Now;
+let DurationGame = 0;
 
 document.addEventListener("keydown", (event) => {
   direction = handleDirectionChange(event, direction);
 });
 
-function startGame() {
+document.getElementById("startButton").onclick = function startGame() 
+{
+  document.getElementById("menuPause").style.display = "none"
+
   snake = initSnake();
   food = generateFood(box, canvas);
+
+  DateOfStart = Date.now(); 
+
+  direction = "RIGHT"
 
   gameInterval = setInterval(draw, gameSpeed); // Stockage de l'identifiant de l'intervalle
 }
@@ -29,7 +38,6 @@ function startGame() {
 function draw() {  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 
   const newHead = moveSnake(snake, direction, box);
   
   snake.unshift(newHead);
@@ -42,6 +50,19 @@ function draw() {
     {
       clearInterval(gameInterval);
       console.log(`Fin du jeu. Score : ${score}`)
+
+      DurationGame = Math.floor((Date.now() - DateOfStart)/1000);
+      document.getElementById("timer").textContent = DurationGame
+
+      document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"
+
+      for (element of document.getElementsByClassName("Stat")) {
+        element.style.display = "block"
+      }
+
+      document.getElementById("score").textContent = score
+      document.getElementById("menuPause").style.display = "block"
+      return;
     }
 
   if (food.x === newHead.x && food.y === newHead.y)
@@ -59,4 +80,3 @@ function draw() {
   drawScore(ctx, score);
 }
 
-startGame();
