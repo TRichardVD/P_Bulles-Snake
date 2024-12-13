@@ -27,17 +27,35 @@ function startGame() {
 }
 
 function draw() {  
-  
-  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // 
+  const newHead = moveSnake(snake, direction, box);
+  
+  snake.unshift(newHead);
 
-  snake.unshift(moveSnake(snake, direction, box));
+  // Supprime le dernier segment du serpent
+  // TODO - à mettre à jour lorsque l'on va gérer la nourriture
   snake.pop();
 
-  // Afficher les valeurs
+  if (checkCollision(newHead, snake) || checkWallCollision(newHead, canvas, box))
+    {
+      clearInterval(gameInterval);
+      console.log(`stop game. Score : ${score}`)
+    }
+
+  if (food.x === newHead.x && food.y === newHead.y)
+  {
+    score += 100;
+    food = undefined;
+    food = generateFood(box, canvas)
+    snake.push({x: snake[snake.length - 1].x, 
+                   y: snake[snake.length - 1].y})
+  }
+
+  // Afficher les objets
   drawSnake(ctx, snake, box);
-  drawFood(ctx, snake, box);
+  drawFood(ctx, food, box);
   drawScore();
 }
 
