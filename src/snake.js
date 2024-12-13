@@ -23,7 +23,7 @@ function initSnake() {
  * @returns {{x: number, y: number}} - Un objet représentant les nouvelles coordonnées `x` et `y` de la tête du serpent après le déplacement.
  */
 function moveSnake(snake, direction, box) {
-  const newHead = {x: snake[0].x, y: snake[0].y};
+  const newHead = {x: snake[0].x, y: snake[0].y};  // pas const newHead = snake[0]; car cela ne créer pas un objet mais fait référence à l'objet déja existant se nommant "snake" est modifiera donc toute modification ou lecture seront commune/"syncroniser" 
 
   // Modifier la position de la tête du serpent
   switch(direction) {
@@ -60,11 +60,16 @@ function moveSnake(snake, direction, box) {
  * @param {number} box - La taille d'une case de la grille en pixels, utilisée pour déterminer la taille de chaque segment du serpent.
  */
 function drawSnake(ctx, snake, box) {
- 
   for (let s of snake) {
+    if (snake.indexOf(s) == 0){
+      ctx.fillStyle = "rgb(0, 128, 0)"
+    }
+    else {
+      ctx.fillStyle = "rgb(144, 238, 144)"
+    }
+
     ctx.fillRect(box * s.x, box * s.y, box, box);
   }
-  
 }
 
 export { initSnake, moveSnake, drawSnake };
