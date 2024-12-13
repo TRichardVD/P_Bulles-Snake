@@ -46,7 +46,7 @@ function draw() {
 
   if (food.x === newHead.x && food.y === newHead.y)
   {
-    score += 100;
+    score += 1;
     food = undefined;
     food = generateFood(box, canvas)
     snake.push({x: snake[snake.length - 1].x, 
@@ -56,7 +56,7 @@ function draw() {
   // Afficher les objets
   drawSnake(ctx, snake, box);
   drawFood(ctx, food, box);
-  drawScore();
+  drawScore(ctx, score);
 }
 
 startGame();

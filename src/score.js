@@ -7,8 +7,10 @@
  * @param {CanvasRenderingContext2D} ctx - Le contexte de rendu 2D du canvas utilisé pour dessiner.
  * @param {number} score - Le score à afficher, qui est un entier.
  */
-function drawScore() {
-  // A compléter
+function drawScore(ctx, score) {
+  ctx.font = "24px Arial"
+  ctx.fillStyle = "black"
+  ctx.fillText(`Score : ${score}`, 10, 30)
 }
 
 export {
