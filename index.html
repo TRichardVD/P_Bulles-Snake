@@ -46,17 +46,30 @@
       .Stat {
         display: none;
       }
+      .scoreBoard {
+        font-family: 'Kanit', 'Arial';
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        padding: 20px;
+        background-color: cyan;
+        border-radius: 20px;
+        text-align: center;
+      }
 
     </style>
   </head>
   <body>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div class="scoreBoard">
+      <h2>Tableau des scores</h2>
+      <p>Votre meilleur score : <strong id="BestScore">0</strong></p>
+
+    </div>
     <div id="menuPause">
       <h2 id="PauseMenuTitle">Bienvenue</h2>
-      <div class="Stat">
-        <p>Votre score est de : <strong id="score"></strong></p>
-        <p>Temps écoulé : <strong id="timer"></strong></p>
-      </div>
+      <p class="Stat">Votre score est de : <strong id="score"></strong></p>
+      <p class="Stat">Temps écoulé : <strong id="timer"></strong> secondes</p>
       <button type="button" id="startButton" >Lancer le jeu</button>
     </div>
     <script type="module" src="./src/main.js"></script>

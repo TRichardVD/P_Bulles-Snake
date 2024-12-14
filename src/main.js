@@ -16,6 +16,7 @@ let score = 0;
 let gameInterval; // Variable pour stocker l'identifiant de l'intervalle
 let DateOfStart = Date.Now;
 let DurationGame = 0;
+let BestScore = 0;
 
 document.addEventListener("keydown", (event) => {
   direction = handleDirectionChange(event, direction);
@@ -23,6 +24,8 @@ document.addEventListener("keydown", (event) => {
 
 document.getElementById("startButton").onclick = function startGame() 
 {
+  score = 0;
+
   document.getElementById("menuPause").style.display = "none"
 
   snake = initSnake();
@@ -51,32 +54,39 @@ function draw() {
       clearInterval(gameInterval);
       console.log(`Fin du jeu. Score : ${score}`)
 
+      if (score > BestScore) {
+        BestScore = score;
+        document.getElementById("BestScore").textContent = BestScore;
+      }
+
       DurationGame = Math.floor((Date.now() - DateOfStart)/1000);
       document.getElementById("timer").textContent = DurationGame
 
       document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"
 
-      for (element of document.getElementsByClassName("Stat")) {
+      document.getElementById("menuPause").style.display = "block"
+
+      for (let element of document.getElementsByClassName("Stat")) {
         element.style.display = "block"
       }
 
-      document.getElementById("score").textContent = score
-      document.getElementById("menuPause").style.display = "block"
+      document.getElementById("score").textContent = score;
       return;
     }
+  else {
+    if (food.x === newHead.x && food.y === newHead.y)
+    {
+      score += 1;
+      food = undefined;
+      food = generateFood(box, canvas)
+      snake.push({x: snake[snake.length - 1].x, 
+                  y: snake[snake.length - 1].y})
+    }
 
-  if (food.x === newHead.x && food.y === newHead.y)
-  {
-    score += 1;
-    food = undefined;
-    food = generateFood(box, canvas)
-    snake.push({x: snake[snake.length - 1].x, 
-                y: snake[snake.length - 1].y})
+    // Afficher les objets
+    drawSnake(ctx, snake, box);
+    drawFood(ctx, food, box);
+    drawScore(ctx, score);
   }
-
-  // Afficher les objets
-  drawSnake(ctx, snake, box);
-  drawFood(ctx, food, box);
-  drawScore(ctx, score);
 }
 
