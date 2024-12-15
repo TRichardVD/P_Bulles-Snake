@@ -16,10 +16,12 @@
         margin: 0;
         background-color: #f0f0f0;
       }
+
       canvas {
         border: 2px solid #000;
         background-color: #fff;
       }
+
       #menuPause {
         font-family: 'Kanit', 'Arial';
         position: absolute;
@@ -30,6 +32,7 @@
         border-radius: 20px;
         text-align: center;
       }
+
       #startButton {
         width: 100%;
         background-color: aliceblue;
@@ -37,15 +40,19 @@
         border-style: none;
         box-shadow: none;
         padding : 10px;
+        font-family: Kanit, Arial, Helvetica, sans-serif;
         
       }
+
       #startButton:hover {
         background-color: rgb(177, 177, 177);
         transition-duration: 1000ms;
       }
+
       .Stat {
         display: none;
       }
+
       .scoreBoard {
         font-family: 'Kanit', 'Arial';
         position: absolute;
@@ -55,6 +62,12 @@
         background-color: cyan;
         border-radius: 20px;
         text-align: center;
+      }
+
+      #InfoReprendreLeJeu {
+        display: none;
+        font-size: 16px;
+        font-weight: bold;
       }
 
     </style>
@@ -73,14 +86,13 @@
         </ol>
       </div>
       <p>Votre meilleur score : <strong id="BestScore">0</strong></p>
-      
-
     </div>
     <div id="menuPause">
       <h2 id="PauseMenuTitle">Bienvenue</h2>
-      <p class="Stat">Votre score est de : <strong id="score"></strong></p>
-      <p class="Stat">Temps écoulé : <strong id="timer"></strong> secondes</p>
+      <p class="Stat">Votre score est de : <span id="score"></span></p>
+      <p class="Stat">Temps écoulé : <span id="timer"></span> secondes</p>
       <button type="button" id="startButton" >Lancer le jeu</button>
+      <p id="InfoReprendreLeJeu">Appuillez sur <kbd>ESPACE</kbd> pour relancer le jeu</p>
     </div>
     <script type="module" src="./src/main.js"></script>
   </body>

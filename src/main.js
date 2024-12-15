@@ -15,13 +15,44 @@ let food;
 let direction = "RIGHT";
 let score = 0;
 let gameInterval; // Variable pour stocker l'identifiant de l'intervalle
-let DateOfStart = Date.Now;
+let DateOfStart = Date.now();
 let DurationGame = 0;
 let BestScore = 0;
+let gameIsPaused = false;
+let gameIsInProgress = false;
+let DurationBreak = 0;
 
 // Gestion des touches du clavier
 document.addEventListener("keydown", (event) => {
-  direction = handleDirectionChange(event, direction);
+  if (event.key === " " && !gameIsPaused && gameIsInProgress) {
+    // Mettre le jeu en pause
+    DurationBreak = Math.floor((Date.now() - DateOfStart)/1000);
+    gameIsPaused = true;
+    clearInterval(gameInterval);
+    document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"
+    document.getElementById("menuPause").style.display = "block"
+    for (let element of document.getElementsByClassName("Stat")) {
+      element.style.display = "block"
+    }
+    document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)
+    document.getElementById("score").textContent = score;
+    document.getElementById("startButton").style.display = "none"
+    document.getElementById("InfoReprendreLeJeu").style.display = "block"
+    return;
+  }
+  else if (event.key === " " && gameIsPaused) {
+    // Reprendre le jeu
+    gameIsPaused = false;
+    DateOfStart = Date.now() - DurationBreak*1000;
+    gameInterval = setInterval(draw, gameSpeed);
+    document.getElementById("menuPause").style.display = "none"
+    document.getElementById("InfoReprendreLeJeu").style.display = "none"
+    return;
+  }
+  else {
+    direction = handleDirectionChange(event, direction);
+
+  }
 });
 
 // Rafraichissement du score toutes les minutes
@@ -31,6 +62,7 @@ let RefreshScoreProcessus = setInterval(RefreshScore, 60000);
 // Fonction pour démarrer le jeu
 document.getElementById("startButton").onclick = function startGame() 
 {
+
   // Réinitialisation des variables
   score = 0;
   direction = "RIGHT"
@@ -47,6 +79,7 @@ document.getElementById("startButton").onclick = function startGame()
 
   // Lancement du jeu
   gameInterval = setInterval(draw, gameSpeed); // Stockage de l'identifiant de l'intervalle
+  gameIsInProgress = true;
 }
 
 function draw() {  
@@ -64,6 +97,7 @@ function draw() {
   if (checkCollision(newHead, snake) || checkWallCollision(newHead, canvas, box))
     {
       // Arrête le jeu
+      gameIsInProgress = false;
       clearInterval(gameInterval);
 
       // Affiche le score final dans la console
@@ -120,9 +154,11 @@ function draw() {
       DurationGame = Math.floor((Date.now() - DateOfStart)/1000);
       document.getElementById("timer").textContent = DurationGame
 
-      document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"
+      document.getElementById("PauseMenuTitle").textContent = "Partie terminée"
 
       document.getElementById("menuPause").style.display = "block"
+
+      document.getElementById("startButton").style.display = "block"
 
       for (let element of document.getElementsByClassName("Stat")) {
         element.style.display = "block"
