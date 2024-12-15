@@ -2,7 +2,8 @@ import { initSnake, moveSnake, drawSnake } from "./snake.js";
 import { generateFood, drawFood } from "./food.js";
 import { handleDirectionChange } from "./controls.js";
 import { checkCollision, checkWallCollision } from "./collision.js";
-import { drawScore } from "./score.js";
+import { drawScore, RefreshScore } from "./score.js";
+import { API_URL, API_TOKEN } from './config.js';
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -18,23 +19,33 @@ let DateOfStart = Date.Now;
 let DurationGame = 0;
 let BestScore = 0;
 
+// Gestion des touches du clavier
 document.addEventListener("keydown", (event) => {
   direction = handleDirectionChange(event, direction);
 });
 
+// Rafraichissement du score toutes les minutes
+RefreshScore();
+let RefreshScoreProcessus = setInterval(RefreshScore, 60000);
+
+// Fonction pour démarrer le jeu
 document.getElementById("startButton").onclick = function startGame() 
 {
+  // Réinitialisation des variables
   score = 0;
-
-  document.getElementById("menuPause").style.display = "none"
-
-  snake = initSnake();
-  food = generateFood(box, canvas);
-
-  DateOfStart = Date.now(); 
-
   direction = "RIGHT"
 
+  // Au démarrage, cacher le menu de pause
+  document.getElementById("menuPause").style.display = "none"
+
+  // Initialisation du serpent et de la nourriture
+  snake = initSnake();
+  food = generateFood(box, canvas);
+  
+  // Initialisation du score
+  DateOfStart = Date.now(); // Stockage de la date de début du jeu
+
+  // Lancement du jeu
   gameInterval = setInterval(draw, gameSpeed); // Stockage de l'identifiant de l'intervalle
 }
 
@@ -49,16 +60,63 @@ function draw() {
   // TODO - à mettre à jour lorsque l'on va gérer la nourriture
   snake.pop();
 
+  // Vérifie si le serpent est entré en collision avec lui-même ou avec un mur puis arrête le jeu
   if (checkCollision(newHead, snake) || checkWallCollision(newHead, canvas, box))
     {
+      // Arrête le jeu
       clearInterval(gameInterval);
-      console.log(`Fin du jeu. Score : ${score}`)
 
+      // Affiche le score final dans la console
+      console.log(`Fin du jeu. Score : ${score}`)
+      
+      // Met à jour le meilleur score si le score actuel est supérieur
       if (score > BestScore) {
         BestScore = score;
         document.getElementById("BestScore").textContent = BestScore;
       }
 
+      // Envoi du score au serveur si le score a battu un des 5 meilleurs scores et supprime le plus petit score pour toujours en avoir 5
+      fetch(API_URL, {
+        method: 'GET',
+        headers: {
+          'X-Master-Key': API_TOKEN,
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(r => {
+        const data = r.record;
+        data.sort((a, b) => b.score - a.score);
+        
+        if (data.length < 5 || score > data[4].score) {
+          if (data.length >= 5) {
+            data.pop(); // Supprime le score le plus bas
+          }
+          data.push({
+            score: score,
+            timer: DurationGame
+          });
+          data.sort((a, b) => b.score - a.score); // Trie à nouveau après avoir ajouté le nouveau score
+
+          fetch(API_URL, {
+            method: 'PUT', // Utilise PUT pour mettre à jour l'ensemble de l'enregistrement
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Master-Key': API_TOKEN,
+            },
+            body: JSON.stringify(data)
+          });
+        }
+      });
+
+      // Rafraichit le score
+      RefreshScore();
+
+      // Affiche le menu de pause
       DurationGame = Math.floor((Date.now() - DateOfStart)/1000);
       document.getElementById("timer").textContent = DurationGame
 
