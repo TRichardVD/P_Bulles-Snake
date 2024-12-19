@@ -1,0 +1,5 @@
+// URL de connection à l'API
+export const API_URL = "";
+
+// Token d'authentification pour la connection API
+export const API_TOKEN = "";

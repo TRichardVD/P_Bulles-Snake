@@ -8,19 +8,19 @@ import { API_URL, API_TOKEN } from './config.js';
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-const box = 20;       // Taille d'une case en pixels
-const gameSpeed = 200;    // Vitesse du jeu en ms
-let snake;      // Serpent du jeu
-let food;       // Nourriture du jeu
-let direction = "RIGHT";    // Direction du serpent
-let score = 0;        // Score du joueur actuel
-let gameInterval; // Variable pour stocker l'identifiant de l'intervalle
-let DateOfStart = Date.now();     // Date de début du jeu
-let DurationGame = 0;     // Durée de la partie en secondes
-let BestScore = 0;      // Meilleur score du joueur
+const box = 20;               // Taille d'une case en pixels
+const gameSpeed = 200;        // Vitesse du jeu en ms
+let snake;                    // Serpent du jeu
+let food;                     // Nourriture du jeu
+let direction = "RIGHT";      // Direction du serpent
+let score = 0;                // Score du joueur actuel
+let gameInterval;             // Variable pour stocker l'identifiant de l'intervalle
+let DateOfStart = Date.now(); // Date de début du jeu
+let DurationGame = 0;         // Durée de la partie en secondes
+let BestScore = 0;            // Meilleur score du joueur
 let gameIsPaused = false;     // Variable pour stocker l'état de la pause
-let gameIsInProgress = false;   // Variable pour stocker l'état du jeu
-let DurationBreak = 0;    // Durée de la pause en secondes
+let gameIsInProgress = false; // Variable pour stocker l'état du jeu
+let DurationBreak = 0;        // Durée de la pause en secondes
 
 // Gestion des touches du clavier
 document.addEventListener("keydown", (event) => {

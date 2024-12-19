@@ -51,6 +51,7 @@ Le code source est organisé dans un répertoire `src/` pour séparer les fichie
     ├── controls.js
     ├── collision.js
     └── score.js
+    └── config.js
 ```
 
 ### Fichiers et Responsabilités
@@ -61,6 +62,7 @@ Le code source est organisé dans un répertoire `src/` pour séparer les fichie
 - **`controls.js`** : Gère les entrées utilisateur pour contrôler la direction du serpent.
 - **`collision.js`** : Contient les fonctions pour vérifier les collisions du serpent avec les murs ou avec lui-même.
 - **`score.js`** : Gère l'affichage du score sur le canevas.
+- **`config.js`** : Liste les constantes secrète pour la connetion API
 
 ## Installation et Exécution
 
@@ -69,6 +71,20 @@ Le code source est organisé dans un répertoire `src/` pour séparer les fichie
 - **Node.js** : Assurez-vous que Node.js est installé sur votre machine.
 
 ### Installation
+
+Modifier les clé API et autres informations sur votre API dans le fichier `config.js`
+> *API json recommandée et testée sur cette application : [jsonbin.io](https://jsonbin.io/)*
+1. Renommez le fichier `config.js.example` en `config.js`
+    Le fichier est censé contenir ceci : 
+```javascript
+    // URL de connection à l'API
+    export const API_URL = "";
+
+    // Token d'authentification pour la connection API
+    export const API_TOKEN = "";
+```
+2. Entrez les informations sur votre API dans le fichier renommé comme indiqué à l'intérieur.
+
 
 Récupérer le code de départ du snake puis :
 
