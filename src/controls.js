@@ -11,7 +11,6 @@
  * @returns {string} - La nouvelle direction du serpent après traitement, ou la direction actuelle si le changement n'est pas valide.
  */
 function handleDirectionChange(event, currentDirection) {
-  // A compléter
 
   switch (event.key) {
     case 'ArrowDown' :

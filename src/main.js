@@ -8,19 +8,19 @@ import { API_URL, API_TOKEN } from './config.js';
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-const box = 20;
-const gameSpeed = 200;
-let snake;
-let food;
-let direction = "RIGHT";
-let score = 0;
+const box = 20;       // Taille d'une case en pixels
+const gameSpeed = 200;    // Vitesse du jeu en ms
+let snake;      // Serpent du jeu
+let food;       // Nourriture du jeu
+let direction = "RIGHT";    // Direction du serpent
+let score = 0;        // Score du joueur actuel
 let gameInterval; // Variable pour stocker l'identifiant de l'intervalle
-let DateOfStart = Date.now();
-let DurationGame = 0;
-let BestScore = 0;
-let gameIsPaused = false;
-let gameIsInProgress = false;
-let DurationBreak = 0;
+let DateOfStart = Date.now();     // Date de début du jeu
+let DurationGame = 0;     // Durée de la partie en secondes
+let BestScore = 0;      // Meilleur score du joueur
+let gameIsPaused = false;     // Variable pour stocker l'état de la pause
+let gameIsInProgress = false;   // Variable pour stocker l'état du jeu
+let DurationBreak = 0;    // Durée de la pause en secondes
 
 // Gestion des touches du clavier
 document.addEventListener("keydown", (event) => {
@@ -28,16 +28,21 @@ document.addEventListener("keydown", (event) => {
     // Mettre le jeu en pause
     DurationBreak = Math.floor((Date.now() - DateOfStart)/1000);
     gameIsPaused = true;
+
+    // Arrête le jeu
     clearInterval(gameInterval);
-    document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"
-    document.getElementById("menuPause").style.display = "block"
-    for (let element of document.getElementsByClassName("Stat")) {
+
+    // Affiche le menu de pause et cache les autres éléments
+    document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"       // Change le titre du menu de pause
+    document.getElementById("menuPause").style.display = "block"                  // Affiche le menu de pause
+    for (let element of document.getElementsByClassName("Stat")) {                // Affiche les élements de statistiques
       element.style.display = "block"
     }
-    document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)
-    document.getElementById("score").textContent = score;
-    document.getElementById("startButton").style.display = "none"
-    document.getElementById("InfoReprendreLeJeu").style.display = "block"
+    document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)  // Affiche le temps écoulé
+    document.getElementById("score").textContent = score;                      // Affiche le score actuel
+    document.getElementById("startButton").style.display = "none"       // Cache le bouton de démarrage du jeu
+    document.getElementById("InfoReprendreLeJeu").style.display = "block"       // Affiche l'information  pour indiquer comment reprendre le jeu
+
     return;
   }
   else if (event.key === " " && gameIsPaused) {
@@ -150,24 +155,28 @@ function draw() {
       // Rafraichit le score
       RefreshScore();
 
+      
       // Affiche le menu de pause
-      DurationGame = Math.floor((Date.now() - DateOfStart)/1000);
       document.getElementById("timer").textContent = DurationGame
-
+      
+      // Modification du titre du menu de pause
       document.getElementById("PauseMenuTitle").textContent = "Partie terminée"
-
+      
+      // Affiche le menu pause
       document.getElementById("menuPause").style.display = "block"
-
       document.getElementById("startButton").style.display = "block"
-
       for (let element of document.getElementsByClassName("Stat")) {
         element.style.display = "block"
       }
-
+      
+      // Met à jour les statistiques
+      DurationGame = Math.floor((Date.now() - DateOfStart)/1000);
       document.getElementById("score").textContent = score;
+
       return;
     }
   else {
+    // Vérifie si le serpent a mangé la nourriture
     if (food.x === newHead.x && food.y === newHead.y)
     {
       score += 1;
