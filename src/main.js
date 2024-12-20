@@ -22,6 +22,17 @@ let gameIsPaused = false;     // Variable pour stocker l'état de la pause
 let gameIsInProgress = false; // Variable pour stocker l'état du jeu
 let DurationBreak = 0;        // Durée de la pause en secondes
 
+// Mettre à jour le meilleur score selon la valeur du cookie
+if (document.cookie.includes("BestScore")) {
+  const cookies = document.cookie.split("; ");
+  const bestScoreCookie = cookies.find(cookie => cookie.startsWith("BestScore="));
+  if (bestScoreCookie) {
+    BestScore = bestScoreCookie.split("=")[1];
+    document.getElementById("BestScoreDisplay").textContent = BestScore
+  }
+}
+
+
 // Gestion des touches du clavier
 document.addEventListener("keydown", (event) => {
   if (event.key === " " && !gameIsPaused && gameIsInProgress) {
@@ -115,6 +126,7 @@ function draw() {
       if (score > BestScore) {
         BestScore = score;
         document.getElementById("BestScoreDisplay").textContent = BestScore;
+        document.cookie = `BestScore=${BestScore};`
       }
 
       // Envoi du score au serveur si le score a battu un des 5 meilleurs scores et supprime le plus petit score pour toujours en avoir 5
