@@ -107,11 +107,14 @@ function draw() {
 
       // Affiche le score final dans la console
       console.log(`Fin du jeu. Score : ${score}`)
-      
+     
+      // Met à jour la durée de la partie
+      DurationGame = Math.floor((Date.now() - DateOfStart)/1000)
+
       // Met à jour le meilleur score si le score actuel est supérieur
       if (score > BestScore) {
         BestScore = score;
-        document.getElementById("BestScore").textContent = BestScore;
+        document.getElementById("BestScoreDisplay").textContent = BestScore;
       }
 
       // Envoi du score au serveur si le score a battu un des 5 meilleurs scores et supprime le plus petit score pour toujours en avoir 5
@@ -154,10 +157,6 @@ function draw() {
 
       // Rafraichit le score
       RefreshScore();
-
-      
-      // Affiche le menu de pause
-      document.getElementById("timer").textContent = DurationGame
       
       // Modification du titre du menu de pause
       document.getElementById("PauseMenuTitle").textContent = "Partie terminée"
@@ -170,7 +169,7 @@ function draw() {
       }
       
       // Met à jour les statistiques
-      DurationGame = Math.floor((Date.now() - DateOfStart)/1000);
+      document.getElementById("timer").textContent = DurationGame
       document.getElementById("score").textContent = score;
 
       return;
