@@ -194,13 +194,14 @@ function draw() {
               'X-Master-Key': API_TOKEN,
             },
             body: JSON.stringify(data)
+          })
+          .then (r => {
+            // Rafraichit le score
+            RefreshScore();
           });
         }
       });
 
-      // Rafraichit le score
-      RefreshScore();
-      
       // Modification du titre du menu de pause
       document.getElementById("PauseMenuTitle").textContent = "Partie terminée"
       
