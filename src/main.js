@@ -17,9 +17,13 @@ let score = 0;                // Score du joueur actuel
 let gameInterval;             // Variable pour stocker l'identifiant de l'intervalle
 let DateOfStart = Date.now(); // Date de début du jeu
 let DurationGame = 0;         // Durée de la partie en secondes
+
 let BestScore = 0;            // Meilleur score du joueur
+let BestTimer = 0;     // Meilleur temps pour le meilleur score
+
 let gameIsPaused = false;     // Variable pour stocker l'état de la pause
 let gameIsInProgress = false; // Variable pour stocker l'état du jeu
+
 let DurationBreak = 0;        // Durée de la pause en secondes
 
 // Mettre à jour le meilleur score selon la valeur du cookie
@@ -29,6 +33,11 @@ if (document.cookie.includes("BestScore")) {
   if (bestScoreCookie) {
     BestScore = bestScoreCookie.split("=")[1];
     document.getElementById("BestScoreDisplay").textContent = BestScore
+  }
+  const bestTimerCookie = cookies.find(cookie => cookie.startsWith("BestTimer="));
+  if (bestTimerCookie) {
+    BestTimer = bestTimerCookie.split("=")[1];
+    document.getElementById("BestTimerDisplay").textContent = BestTimer
   }
 }
 
@@ -125,7 +134,19 @@ function draw() {
       // Met à jour le meilleur score si le score actuel est supérieur
       if (score > BestScore) {
         BestScore = score;
+        BestTimer = DurationGame;
         document.getElementById("BestScoreDisplay").textContent = BestScore;
+        document.getElementById("BestTimerDisplay").textContent = BestTimer;
+        document.cookie = `BestTimer=${BestTimer};`
+        document.cookie = `BestScore=${BestScore};`
+       
+        console.log(document.cookie)
+      }
+      // Met à jour le meilleur timer si le timer actuel est supérieur
+      else if (DurationGame > BestTimer && score === BestScore) {
+        BestTimer = DurationGame;
+        document.getElementById("BestTimerDisplay").textContent = BestTimer;
+        document.cookie = `BestTimer=${BestTimer};`
         document.cookie = `BestScore=${BestScore};`
       }
 
