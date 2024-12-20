@@ -19,10 +19,9 @@ function initSnake() {
  *
  * @param {Array<{x: number, y: number}>} snake - Le tableau représentant le serpent, où chaque élément est un segment avec des coordonnées `x` et `y`.
  * @param {string} direction - La direction actuelle du mouvement du serpent ("LEFT", "UP", "RIGHT", ou "DOWN").
- * @param {number} box - La taille d'une case de la grille en pixels, utilisée pour déterminer la distance de déplacement du serpent.
  * @returns {{x: number, y: number}} - Un objet représentant les nouvelles coordonnées `x` et `y` de la tête du serpent après le déplacement.
  */
-function moveSnake(snake, direction, box) {
+function moveSnake(snake, direction) {
   const newHead = {x: snake[0].x, y: snake[0].y};  // pas const newHead = snake[0]; car cela ne créer pas un objet mais fait référence à l'objet déja existant se nommant "snake" est modifiera donc toute modification ou lecture seront commune/"syncroniser" 
 
   // Modifier la position de la tête du serpent
