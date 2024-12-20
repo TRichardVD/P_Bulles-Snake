@@ -40,17 +40,23 @@ function RefreshScore() {
     const data = r.record;
 
     if (Array.isArray(data) && data.every(item => typeof item.score === 'number')) {
-      data.sort((a, b) => b.score - a.score);
+
+      data.sort((a, b) => {
+         if (a.score === b.score) {
+          return a.timer - b.timer
+        }
+        return b.score - a.score;
+      });
+
       for(let i = 0; i < data.length; i++) {
         document.getElementById(`score${i + 1}`).textContent = `${data[i].score} points en ${data[i].timer} secondes`;
-  
       }
     } else {
       console.error('Les données ne sont pas un tableau ou une propriété valide.');
     }
   })
   .catch(error => {
-    console.error('There has been a problem with your fetch operation:', error);
+    console.error('Il y a une erreur avec fetch : ', error);
   });
 
 }

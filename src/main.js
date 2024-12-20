@@ -144,9 +144,14 @@ function draw() {
       })
       .then(r => {
         const data = r.record;
-        data.sort((a, b) => b.score - a.score);
+        data.sort((a, b) => {
+          if (a.score === b.score) {
+           return a.timer - b.timer
+         }
+         return b.score - a.score;
+       });
         
-        if (data.length < 5 || score > data[4].score) {
+        if (data.length < 5 || score > data[4].score || (score === data[4].score && DurationGame < data[4].timer)) {
           if (data.length >= 5) {
             data.pop(); // Supprime le score le plus bas
           }
@@ -154,7 +159,12 @@ function draw() {
             score: score,
             timer: DurationGame
           });
-          data.sort((a, b) => b.score - a.score); // Trie à nouveau après avoir ajouté le nouveau score
+          data.sort((a, b) => {
+            if (a.score === b.score) {
+             return a.timer - b.timer
+           }
+           return b.score - a.score;
+         }); // Trie à nouveau après avoir ajouté le nouveau score
 
           fetch(API_URL, {
             method: 'PUT', // Utilise PUT pour mettre à jour l'ensemble de l'enregistrement
