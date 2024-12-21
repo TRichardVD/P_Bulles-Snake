@@ -26,7 +26,8 @@ let gameIsInProgress = false; // Variable pour stocker l'état du jeu
 
 let DurationBreak = 0;        // Durée de la pause en secondes
 
-let DateOfLastRefresh = Date.now(); // Date du dernier tour du serpent
+let DateOfLastSnakeTurn = Date.now(); // Date du dernier tour du serpent
+let DateOfLastRefresh = Date.now();   // Date du dernier rafraichissement du jeu
 
 // Mettre à jour le meilleur score selon la valeur du cookie
 if (document.cookie.includes("BestScore")) {
@@ -43,7 +44,9 @@ if (document.cookie.includes("BestScore")) {
   }
 }
 
-// Fonction pour démarrer le jeu
+/**
+ * Fonciton pour démarrer le jeu
+ */
 function startGame() 
 {
 
@@ -104,9 +107,9 @@ document.addEventListener("keydown", (event) => {
     document.getElementById("InfoReprendreLeJeu").style.display = "none"
     return;
   }
-  else if ((Date.now() - DateOfLastRefresh) >= gameSpeed && gameIsInProgress) {
+  else if ((Date.now() - DateOfLastSnakeTurn) >= (Date.now() - DateOfLastRefresh) && gameIsInProgress) {
     direction = handleDirectionChange(event, direction);
-    DateOfLastRefresh = Date.now();
+    DateOfLastSnakeTurn = Date.now();
   }
 
 });
@@ -115,7 +118,16 @@ document.addEventListener("keydown", (event) => {
 RefreshScore();
 let RefreshScoreProcessus = setInterval(RefreshScore, 60000);
 
+/**
+ * 
+ * Fonction appelée à chaque intervalle de temps pour mettre à jour le jeu.
+ * 
+ * @returns {void}
+ */
 function draw() {  
+
+  DateOfLastRefresh = Date.now();
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   const newHead = moveSnake(snake, direction, box);
