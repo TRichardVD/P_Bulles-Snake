@@ -43,52 +43,8 @@ if (document.cookie.includes("BestScore")) {
   }
 }
 
-
-// Gestion des touches du clavier
-document.addEventListener("keydown", (event) => {
-  if (event.key === " " && !gameIsPaused && gameIsInProgress) {
-    // Mettre le jeu en pause
-    DurationBreak = Math.floor((Date.now() - DateOfStart)/1000);
-    gameIsPaused = true;
-
-    // Arrête le jeu
-    clearInterval(gameInterval);
-
-    // Affiche le menu de pause et cache les autres éléments
-    document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"       // Change le titre du menu de pause
-    document.getElementById("menuPause").style.display = "block"                  // Affiche le menu de pause
-    for (let element of document.getElementsByClassName("Stat")) {                // Affiche les élements de statistiques
-      element.style.display = "block"
-    }
-    document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)  // Affiche le temps écoulé
-    document.getElementById("score").textContent = score;                                       // Affiche le score actuel
-    document.getElementById("startButton").style.display = "none"                               // Cache le bouton de démarrage du jeu
-    document.getElementById("InfoReprendreLeJeu").style.display = "block"                       // Affiche l'information  pour indiquer comment reprendre le jeu
-
-    return;
-  }
-  else if (event.key === " " && gameIsPaused) {
-    // Reprendre le jeu
-    gameIsPaused = false;
-    DateOfStart = Date.now() - DurationBreak*1000;
-    gameInterval = setInterval(draw, gameSpeed);
-    document.getElementById("menuPause").style.display = "none"
-    document.getElementById("InfoReprendreLeJeu").style.display = "none"
-    return;
-  }
-  else if ((Date.now() - DateOfLastRefresh) >= gameSpeed && gameIsInProgress) {
-    direction = handleDirectionChange(event, direction);
-    DateOfLastRefresh = Date.now();
-  }
-
-});
-
-// Rafraichissement du score toutes les minutes
-RefreshScore();
-let RefreshScoreProcessus = setInterval(RefreshScore, 60000);
-
 // Fonction pour démarrer le jeu
-document.getElementById("startButton").onclick = function startGame() 
+function startGame() 
 {
 
   // Réinitialisation des variables
@@ -109,6 +65,55 @@ document.getElementById("startButton").onclick = function startGame()
   gameInterval = setInterval(draw, gameSpeed); // Stockage de l'identifiant de l'intervalle
   gameIsInProgress = true;
 }
+
+document.getElementById("startButton").onclick = () => {startGame()};
+
+// Gestion des touches du clavier
+document.addEventListener("keydown", (event) => {
+  if (event.key === " " && !gameIsInProgress) {
+    // Démarrer le jeu
+    startGame();
+  }
+  else if (event.key === " " && !gameIsPaused && gameIsInProgress) {
+    // Mettre le jeu en pause
+    DurationBreak = Math.floor((Date.now() - DateOfStart)/1000);
+    gameIsPaused = true;
+
+    // Arrête le jeu
+    clearInterval(gameInterval);
+
+    // Affiche le menu de pause et cache les autres éléments
+    document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"       // Change le titre du menu de pause
+    document.getElementById("menuPause").style.display = "block"                  // Affiche le menu de pause
+    for (let element of document.getElementsByClassName("Stat")) {                // Affiche les élements de statistiques
+      element.style.display = "block"
+    }
+    document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)  // Affiche le temps écoulé
+    document.getElementById("score").textContent = score;                                       // Affiche le score actuel
+    document.getElementById("startButton").style.display = "none"                               // Cache le bouton de démarrage du jeu
+    document.getElementById("InfoReprendreLeJeu").style.display = "block"                       // Affiche l'information  pour indiquer comment reprendre le jeu
+
+    return;
+  }
+  else if (event.key === " " && gameIsPaused && gameIsInProgress) {
+    // Reprendre le jeu
+    gameIsPaused = false;
+    DateOfStart = Date.now() - DurationBreak*1000;
+    gameInterval = setInterval(draw, gameSpeed);
+    document.getElementById("menuPause").style.display = "none"
+    document.getElementById("InfoReprendreLeJeu").style.display = "none"
+    return;
+  }
+  else if ((Date.now() - DateOfLastRefresh) >= gameSpeed && gameIsInProgress) {
+    direction = handleDirectionChange(event, direction);
+    DateOfLastRefresh = Date.now();
+  }
+
+});
+
+// Rafraichissement du score toutes les minutes
+RefreshScore();
+let RefreshScoreProcessus = setInterval(RefreshScore, 60000);
 
 function draw() {  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
