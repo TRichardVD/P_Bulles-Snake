@@ -26,6 +26,8 @@ let gameIsInProgress = false; // Variable pour stocker l'état du jeu
 
 let DurationBreak = 0;        // Durée de la pause en secondes
 
+let DateOfLastRefresh = Date.now(); // Date du dernier tour du serpent
+
 // Mettre à jour le meilleur score selon la valeur du cookie
 if (document.cookie.includes("BestScore")) {
   const cookies = document.cookie.split("; ");
@@ -59,9 +61,9 @@ document.addEventListener("keydown", (event) => {
       element.style.display = "block"
     }
     document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)  // Affiche le temps écoulé
-    document.getElementById("score").textContent = score;                      // Affiche le score actuel
-    document.getElementById("startButton").style.display = "none"       // Cache le bouton de démarrage du jeu
-    document.getElementById("InfoReprendreLeJeu").style.display = "block"       // Affiche l'information  pour indiquer comment reprendre le jeu
+    document.getElementById("score").textContent = score;                                       // Affiche le score actuel
+    document.getElementById("startButton").style.display = "none"                               // Cache le bouton de démarrage du jeu
+    document.getElementById("InfoReprendreLeJeu").style.display = "block"                       // Affiche l'information  pour indiquer comment reprendre le jeu
 
     return;
   }
@@ -74,10 +76,11 @@ document.addEventListener("keydown", (event) => {
     document.getElementById("InfoReprendreLeJeu").style.display = "none"
     return;
   }
-  else {
+  else if ((Date.now() - DateOfLastRefresh) >= gameSpeed && gameIsInProgress) {
     direction = handleDirectionChange(event, direction);
-
+    DateOfLastRefresh = Date.now();
   }
+
 });
 
 // Rafraichissement du score toutes les minutes
@@ -111,7 +114,7 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   const newHead = moveSnake(snake, direction, box);
-  
+
   snake.unshift(newHead);
 
   // Supprime le dernier segment du serpent
