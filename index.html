@@ -33,7 +33,7 @@
         text-align: center;
       }
 
-      #startButton {
+      button {
         width: 100%;
         background-color: aliceblue;
         border-radius: 10px;
@@ -44,7 +44,7 @@
         
       }
 
-      #startButton:hover {
+      button:hover {
         background-color: rgb(177, 177, 177);
         transition-duration: 1000ms;
       }
@@ -64,7 +64,7 @@
         text-align: center;
       }
 
-      #InfoReprendreLeJeu {
+      #ReprendreJeu {
         display: none;
         font-size: 16px;
         font-weight: bold;
@@ -92,7 +92,7 @@
       <p class="Stat">Votre score est de : <span id="score"></span></p>
       <p class="Stat">Temps écoulé : <span id="timer"></span> secondes</p>
       <button type="button" id="startButton" >Lancer le jeu</button>
-      <p id="InfoReprendreLeJeu">Appuillez sur <kbd>ESPACE</kbd> pour relancer le jeu</p>
+      <button type="button" id="ReprendreJeu">Reprendre la partie</button>
     </div>
     <script type="module" src="./src/main.js"></script>
   </body>

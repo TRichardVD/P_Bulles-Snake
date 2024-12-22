@@ -215,17 +215,13 @@ document.addEventListener("keydown", (event) => {
     document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)  // Affiche le temps écoulé
     document.getElementById("score").textContent = score;                                       // Affiche le score actuel
     document.getElementById("startButton").style.display = "none"                               // Cache le bouton de démarrage du jeu
-    document.getElementById("InfoReprendreLeJeu").style.display = "block"                       // Affiche l'information  pour indiquer comment reprendre le jeu
+    document.getElementById("ReprendreJeu").style.display = "block"                       // Affiche l'information  pour indiquer comment reprendre le jeu
 
     return;
   }
   else if (event.key === " " && gameIsPaused && gameIsInProgress) {
     // Reprendre le jeu
-    gameIsPaused = false;
-    DateOfStart = Date.now() - DurationBreak*1000;
-    gameInterval = setInterval(draw, gameSpeed);
-    document.getElementById("menuPause").style.display = "none"
-    document.getElementById("InfoReprendreLeJeu").style.display = "none"
+    RestartGame();
     return;
   }
   else if ((Date.now() - DateOfLastSnakeTurn) >= (Date.now() - DateOfLastRefresh) && gameIsInProgress) {
@@ -235,11 +231,30 @@ document.addEventListener("keydown", (event) => {
   
 });
 
+/**
+ * 
+ * Permet de redémarrer le jeu après une pause
+ * 
+ * @returns {void}
+ */
+function RestartGame() {
+  // Reprendre le jeu
+  if (gameIsPaused === false) {
+    return;
+  }
+  gameIsPaused = false;
+  DateOfStart = Date.now() - DurationBreak*1000;
+  gameInterval = setInterval(draw, gameSpeed);
+  document.getElementById("menuPause").style.display = "none"
+  document.getElementById("ReprendreJeu").style.display = "none"
+  return;
+}
+
 // Si l'utilisateur essaie de quitter la page, on lui demande confirmation si une partie est en cours
 window.addEventListener('beforeunload', function (e) {
   if (gameIsInProgress) {
     e.preventDefault();
-    return 'Une parite est en cours. Êtes-vous sûr de vouloir quitter la page ?';
+    return 'Une partie est en cours. Êtes-vous sûr de vouloir quitter la page ?';
   }
 });
 
@@ -262,7 +277,9 @@ if (document.cookie.includes("BestScore")) {
 
 document.getElementById("startButton").onclick = () => {startGame()};
 
+document.getElementById("ReprendreJeu").onclick = () => {RestartGame()};
+
 // Rafraichissement du score toutes les minutes
 RefreshScore(BestScore, BestTimer);
-let RefreshScoreProcessus = setInterval(() => RefreshScore(BestScore, BestTimer), 60000);
+let RefreshScoreProcessus = setInterval(() => RefreshScore(BestScore, BestTimer), 60000); // Ecrit de cette facon car RefreshScore retourne une promesse ce qui fait que setInterval ne fonctionne pas
 
