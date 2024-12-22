@@ -20,11 +20,11 @@ function drawScore(ctx, score) {
  * 
  * Cette fonction récupère les scores stockés sur le serveur et les affiche dans le Scoreboard.
  * 
- * 
+ * @returns {Promise} Une promesse qui résout lorsque les scores sont récupérés et affichés.
  */
 function RefreshScore() {
   
-  fetch(API_URL, {
+   return fetch(API_URL, {
     method: 'GET',
     headers: {
       'X-Master-Key': API_TOKEN,
@@ -58,6 +58,8 @@ function RefreshScore() {
   .catch(error => {
     console.error('Il y a une erreur avec fetch : ', error);
   });
+
+
 
 }
 

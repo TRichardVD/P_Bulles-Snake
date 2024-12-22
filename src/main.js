@@ -109,20 +109,11 @@ function draw() {
       }
 
       // Envoi du score au serveur si le score a battu un des 5 meilleurs scores et supprime le plus petit score pour toujours en avoir 5
-      fetch(API_URL, {
-        method: 'GET',
-        headers: {
-          'X-Master-Key': API_TOKEN,
-        }
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
+      RefreshScore()
       .then(r => {
         const data = r.record;
+
+        // Trie les données pour avoir les 5 meilleurs scores dans l'order décroissant
         data.sort((a, b) => {
           if (a.score === b.score) {
            return a.timer - b.timer
@@ -130,20 +121,25 @@ function draw() {
          return b.score - a.score;
        });
         
-        if (data.length < 5 || score > data[4].score || (score === data[4].score && DurationGame < data[4].timer)) {
+       // Vérifie si le score actuel est supérieur à un des 5 meilleurs scores ou si il y a moins que 5 scores
+        if (score > data[4].score || (score === data[4].score && DurationGame < data[4].timer || data.length < 5)) {
+          
+           // Supprime le score le plus bas si il y a déjà 5 scores
           if (data.length >= 5) {
-            data.pop(); // Supprime le score le plus bas
+            data.pop();
           }
           data.push({
             score: score,
             timer: DurationGame
           });
+
+          // Trie à nouveau après avoir ajouté le nouveau score
           data.sort((a, b) => {
             if (a.score === b.score) {
              return a.timer - b.timer
            }
            return b.score - a.score;
-         }); // Trie à nouveau après avoir ajouté le nouveau score
+         }); 
 
           fetch(API_URL, {
             method: 'PUT', // Utilise PUT pour mettre à jour l'ensemble de l'enregistrement
