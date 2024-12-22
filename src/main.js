@@ -2,7 +2,7 @@ import { initSnake, moveSnake, drawSnake } from "./snake.js";
 import { generateFood, drawFood } from "./food.js";
 import { handleDirectionChange } from "./controls.js";
 import { checkCollision, checkWallCollision } from "./collision.js";
-import { drawScore, RefreshScore } from "./score.js";
+import { drawScore, RefreshScore, ScoreboardData} from "./score.js";
 import { API_URL, API_TOKEN } from './config.js';
 
 const canvas = document.getElementById("gameCanvas"); 
@@ -109,12 +109,10 @@ function draw() {
       }
 
       // Envoi du score au serveur si le score a battu un des 5 meilleurs scores et supprime le plus petit score pour toujours en avoir 5
-      RefreshScore()
+      RefreshScore(BestScore, BestTimer)
       .then(r => {
-        const data = r.record;
-
         // Trie les données pour avoir les 5 meilleurs scores dans l'order décroissant
-        data.sort((a, b) => {
+        ScoreboardData.sort((a, b) => {
           if (a.score === b.score) {
            return a.timer - b.timer
          }
@@ -122,19 +120,19 @@ function draw() {
        });
         
        // Vérifie si le score actuel est supérieur à un des 5 meilleurs scores ou si il y a moins que 5 scores
-        if (score > data[4].score || (score === data[4].score && DurationGame < data[4].timer || data.length < 5)) {
+        if (score > ScoreboardData[4].score || (score === ScoreboardData[4].score && DurationGame < ScoreboardData[4].timer || ScoreboardData.length < 5)) {
           
            // Supprime le score le plus bas si il y a déjà 5 scores
-          if (data.length >= 5) {
-            data.pop();
+          if (ScoreboardData.length >= 5) {
+            ScoreboardData.pop();
           }
-          data.push({
+          ScoreboardData.push({
             score: score,
             timer: DurationGame
           });
 
           // Trie à nouveau après avoir ajouté le nouveau score
-          data.sort((a, b) => {
+          ScoreboardData.sort((a, b) => {
             if (a.score === b.score) {
              return a.timer - b.timer
            }
@@ -147,11 +145,11 @@ function draw() {
               'Content-Type': 'application/json',
               'X-Master-Key': API_TOKEN,
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(ScoreboardData)
           })
           .then (r => {
             // Rafraichit le score
-            RefreshScore();
+            RefreshScore(BestScore, BestTimer);
           });
         }
       });
@@ -265,7 +263,6 @@ if (document.cookie.includes("BestScore")) {
 document.getElementById("startButton").onclick = () => {startGame()};
 
 // Rafraichissement du score toutes les minutes
-RefreshScore();
-let RefreshScoreProcessus = setInterval(RefreshScore, 60000);
-
+RefreshScore(BestScore, BestTimer);
+let RefreshScoreProcessus = setInterval(() => RefreshScore(BestScore, BestTimer), 60000);
 

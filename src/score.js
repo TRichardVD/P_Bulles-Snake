@@ -15,6 +15,8 @@ function drawScore(ctx, score) {
   ctx.fillText(`Score : ${score}`, 10, 30)
 }
 
+let ScoreboardData = [];
+
 /**
  * Rafraîchit le score du Scoreboard.
  * 
@@ -22,7 +24,7 @@ function drawScore(ctx, score) {
  * 
  * @returns {Promise} Une promesse qui résout lorsque les scores sont récupérés et affichés.
  */
-function RefreshScore() {
+function RefreshScore(bestScore, bestTime) {
   
    return fetch(API_URL, {
     method: 'GET',
@@ -37,26 +39,34 @@ function RefreshScore() {
     return response.json();
   })
   .then(r => {
-    const data = r.record;
+    ScoreboardData = r.record;
 
-    if (Array.isArray(data) && data.every(item => typeof item.score === 'number')) {
+    if (Array.isArray(ScoreboardData) && ScoreboardData.every(item => typeof item.score === 'number')) {
 
-      data.sort((a, b) => {
+      ScoreboardData.sort((a, b) => {
          if (a.score === b.score) {
           return a.timer - b.timer
         }
         return b.score - a.score;
       });
 
-      for(let i = 0; i < data.length; i++) {
-        document.getElementById(`score${i + 1}`).textContent = `${data[i].score} points en ${data[i].timer} secondes`;
+      for(let i = 0; i < ScoreboardData.length; i++) {
+        const element = document.getElementById(`score${i + 1}`);
+
+        if (bestScore == ScoreboardData[i].score && bestTime == ScoreboardData[i].timer) {
+          element.style.fontWeight = 'bold';
+        }
+        else {  
+          element.style.fontWeight = 'normal';
+        }
+        element.textContent = `${ScoreboardData[i].score} points en ${ScoreboardData[i].timer} secondes`;
       }
     } else {
       console.error('Les données ne sont pas un tableau ou une propriété valide.');
     }
   })
   .catch(error => {
-    console.error('Il y a une erreur avec fetch : ', error);
+    console.error('Il y a une erreur avec le fetch : ', error);
   });
 
 
@@ -65,5 +75,6 @@ function RefreshScore() {
 
 export {
   drawScore,
-  RefreshScore
+  RefreshScore,
+  ScoreboardData
 }
