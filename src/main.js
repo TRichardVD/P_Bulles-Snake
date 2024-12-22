@@ -5,9 +5,10 @@ import { checkCollision, checkWallCollision } from "./collision.js";
 import { drawScore, RefreshScore } from "./score.js";
 import { API_URL, API_TOKEN } from './config.js';
 
-const canvas = document.getElementById("gameCanvas");
+const canvas = document.getElementById("gameCanvas"); 
 const ctx = canvas.getContext("2d");
 
+// Variables du jeu
 const box = 20;               // Taille d'une case en pixels
 const gameSpeed = 200;        // Vitesse du jeu en ms
 let snake;                    // Serpent du jeu
@@ -17,17 +18,16 @@ let score = 0;                // Score du joueur actuel
 let gameInterval;             // Variable pour stocker l'identifiant de l'intervalle
 let DateOfStart = Date.now(); // Date de début du jeu
 let DurationGame = 0;         // Durée de la partie en secondes
-
-let BestScore = 0;            // Meilleur score du joueur
-let BestTimer = 0;     // Meilleur temps pour le meilleur score
-
+let DateOfLastRefresh = Date.now();   // Date du dernier rafraichissement du jeu
 let gameIsPaused = false;     // Variable pour stocker l'état de la pause
 let gameIsInProgress = false; // Variable pour stocker l'état du jeu
 
-let DurationBreak = 0;        // Durée de la pause en secondes
+// Variables pour le meilleur score
+let BestScore = 0;            // Meilleur score du joueur
+let BestTimer = 0;            // Meilleur temps pour le meilleur score
 
+let DurationBreak = 0;        // Durée de la pause en secondes
 let DateOfLastSnakeTurn = Date.now(); // Date du dernier tour du serpent
-let DateOfLastRefresh = Date.now();   // Date du dernier rafraichissement du jeu
 
 // Mettre à jour le meilleur score selon la valeur du cookie
 if (document.cookie.includes("BestScore")) {
@@ -43,6 +43,14 @@ if (document.cookie.includes("BestScore")) {
     document.getElementById("BestTimerDisplay").textContent = BestTimer
   }
 }
+
+// Si l'utilisateur essaie de quitter la page, on lui demande confirmation si une partie est en cours
+window.addEventListener('beforeunload', function (e) {
+  if (gameIsInProgress) {
+    e.preventDefault();
+    return 'Une parite est en cours. Êtes-vous sûr de vouloir quitter la page ?';
+  }
+});
 
 /**
  * Fonciton pour démarrer le jeu
