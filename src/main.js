@@ -56,6 +56,105 @@ function startGame()
   gameIsInProgress = true;
 }
 
+function StopGame() {
+  // Arrête le jeu
+  gameIsInProgress = false;
+  clearInterval(gameInterval);
+
+  // Affiche le score final dans la console
+  console.log(`Fin du jeu. Score : ${score}`)
+ 
+  // Met à jour la durée de la partie
+  DurationGame = Math.floor((Date.now() - DateOfStart)/1000)
+
+  // Met à jour le meilleur score si le score actuel est supérieur
+  if (score > BestScore) {
+    BestScore = score;
+    BestTimer = DurationGame;
+    document.getElementById("BestScoreDisplay").textContent = BestScore;
+    document.getElementById("BestTimerDisplay").textContent = BestTimer;
+    document.cookie = `BestTimer=${BestTimer};`
+    document.cookie = `BestScore=${BestScore};`
+   
+    console.log(document.cookie)
+  }
+  // Met à jour le meilleur timer si le timer actuel est supérieur
+  else if (DurationGame > BestTimer && score === BestScore) {
+    BestTimer = DurationGame;
+    document.getElementById("BestTimerDisplay").textContent = BestTimer;
+    document.cookie = `BestTimer=${BestTimer};`
+    document.cookie = `BestScore=${BestScore};`
+  }
+
+  // Envoi du score au serveur si le score a battu un des 5 meilleurs scores et supprime le plus petit score pour toujours en avoir 5
+  RefreshScore(BestScore, BestTimer)
+  .then(r => {
+    // Trie les données pour avoir les 5 meilleurs scores dans l'order décroissant
+    ScoreboardData.sort((a, b) => {
+      if (a.score === b.score) {
+       return a.timer - b.timer
+     }
+     return b.score - a.score;
+   });
+    
+   // Vérifie si le score actuel est supérieur à un des 5 meilleurs scores ou si il y a moins que 5 scores
+    if (score > ScoreboardData[4].score || (score === ScoreboardData[4].score && DurationGame < ScoreboardData[4].timer || ScoreboardData.length < 5)) {
+      
+       // Supprime le score le plus bas si il y a déjà 5 scores
+      if (ScoreboardData.length >= 5) {
+        ScoreboardData.pop();
+      }
+      ScoreboardData.push({
+        score: score,
+        timer: DurationGame
+      });
+
+      // Trie à nouveau après avoir ajouté le nouveau score
+      ScoreboardData.sort((a, b) => {
+        if (a.score === b.score) {
+         return a.timer - b.timer
+       }
+       return b.score - a.score;
+     }); 
+
+      fetch(API_URL, {
+        method: 'PUT', // Utilise PUT pour mettre à jour l'ensemble de l'enregistrement
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': API_TOKEN,
+        },
+        body: JSON.stringify(ScoreboardData)
+      })
+      .then (r => {
+        // Rafraichit le score
+        RefreshScore(BestScore, BestTimer);
+      });
+    }
+  });
+
+  // Modification du titre du menu de pause
+  document.getElementById("PauseMenuTitle").textContent = "Partie terminée"
+  
+  // Affiche le menu pause
+  document.getElementById("menuPause").style.display = "block"
+  document.getElementById("startButton").style.display = "block"
+  for (let element of document.getElementsByClassName("Stat")) {
+    element.style.display = "block"
+  }
+  
+  // Met à jour les statistiques
+  document.getElementById("timer").textContent = DurationGame
+  document.getElementById("score").textContent = score;
+
+  // Mettre les valeurs par défaut dans le cas où l'utilisateur etait dans le menu de pause
+  gameIsPaused = false;
+  document.getElementById("ReprendreJeu").style.display = "none"               // Cacher le bouton pour reprendre le jeu
+  document.getElementById("LeaveGame").style.display = "none"                    // Cacher le bouton pour relancer le jeu
+
+
+}
+
+
 /**
  * 
  * Fonction appelée à chaque intervalle de temps pour mettre à jour le jeu.
@@ -79,94 +178,7 @@ function draw() {
   // Vérifie si le serpent est entré en collision avec lui-même ou avec un mur puis arrête le jeu
   if (checkCollision(newHead, snake) || checkWallCollision(newHead, canvas, box))
     {
-      // Arrête le jeu
-      gameIsInProgress = false;
-      clearInterval(gameInterval);
-
-      // Affiche le score final dans la console
-      console.log(`Fin du jeu. Score : ${score}`)
-     
-      // Met à jour la durée de la partie
-      DurationGame = Math.floor((Date.now() - DateOfStart)/1000)
-
-      // Met à jour le meilleur score si le score actuel est supérieur
-      if (score > BestScore) {
-        BestScore = score;
-        BestTimer = DurationGame;
-        document.getElementById("BestScoreDisplay").textContent = BestScore;
-        document.getElementById("BestTimerDisplay").textContent = BestTimer;
-        document.cookie = `BestTimer=${BestTimer};`
-        document.cookie = `BestScore=${BestScore};`
-       
-        console.log(document.cookie)
-      }
-      // Met à jour le meilleur timer si le timer actuel est supérieur
-      else if (DurationGame > BestTimer && score === BestScore) {
-        BestTimer = DurationGame;
-        document.getElementById("BestTimerDisplay").textContent = BestTimer;
-        document.cookie = `BestTimer=${BestTimer};`
-        document.cookie = `BestScore=${BestScore};`
-      }
-
-      // Envoi du score au serveur si le score a battu un des 5 meilleurs scores et supprime le plus petit score pour toujours en avoir 5
-      RefreshScore(BestScore, BestTimer)
-      .then(r => {
-        // Trie les données pour avoir les 5 meilleurs scores dans l'order décroissant
-        ScoreboardData.sort((a, b) => {
-          if (a.score === b.score) {
-           return a.timer - b.timer
-         }
-         return b.score - a.score;
-       });
-        
-       // Vérifie si le score actuel est supérieur à un des 5 meilleurs scores ou si il y a moins que 5 scores
-        if (score > ScoreboardData[4].score || (score === ScoreboardData[4].score && DurationGame < ScoreboardData[4].timer || ScoreboardData.length < 5)) {
-          
-           // Supprime le score le plus bas si il y a déjà 5 scores
-          if (ScoreboardData.length >= 5) {
-            ScoreboardData.pop();
-          }
-          ScoreboardData.push({
-            score: score,
-            timer: DurationGame
-          });
-
-          // Trie à nouveau après avoir ajouté le nouveau score
-          ScoreboardData.sort((a, b) => {
-            if (a.score === b.score) {
-             return a.timer - b.timer
-           }
-           return b.score - a.score;
-         }); 
-
-          fetch(API_URL, {
-            method: 'PUT', // Utilise PUT pour mettre à jour l'ensemble de l'enregistrement
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Master-Key': API_TOKEN,
-            },
-            body: JSON.stringify(ScoreboardData)
-          })
-          .then (r => {
-            // Rafraichit le score
-            RefreshScore(BestScore, BestTimer);
-          });
-        }
-      });
-
-      // Modification du titre du menu de pause
-      document.getElementById("PauseMenuTitle").textContent = "Partie terminée"
-      
-      // Affiche le menu pause
-      document.getElementById("menuPause").style.display = "block"
-      document.getElementById("startButton").style.display = "block"
-      for (let element of document.getElementsByClassName("Stat")) {
-        element.style.display = "block"
-      }
-      
-      // Met à jour les statistiques
-      document.getElementById("timer").textContent = DurationGame
-      document.getElementById("score").textContent = score;
+      StopGame();
 
       return;
     }
@@ -215,7 +227,8 @@ document.addEventListener("keydown", (event) => {
     document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)  // Affiche le temps écoulé
     document.getElementById("score").textContent = score;                                       // Affiche le score actuel
     document.getElementById("startButton").style.display = "none"                               // Cache le bouton de démarrage du jeu
-    document.getElementById("ReprendreJeu").style.display = "block"                       // Affiche l'information  pour indiquer comment reprendre le jeu
+    document.getElementById("ReprendreJeu").style.display = "block"                             // Affiche le bouton pour reprendre le jeu
+    document.getElementById("LeaveGame").style.display = "block"                             // Affiche le bouton pour relancer le jeu
 
     return;
   }
@@ -245,8 +258,10 @@ function RestartGame() {
   gameIsPaused = false;
   DateOfStart = Date.now() - DurationBreak*1000;
   gameInterval = setInterval(draw, gameSpeed);
-  document.getElementById("menuPause").style.display = "none"
-  document.getElementById("ReprendreJeu").style.display = "none"
+  document.getElementById("menuPause").style.display = "none" 
+  document.getElementById("ReprendreJeu").style.display = "none"               // Cacher le bouton pour reprendre le jeu
+  document.getElementById("LeaveGame").style.display = "none"                    // Cacher le bouton pour relancer le jeu
+
   return;
 }
 
@@ -278,6 +293,8 @@ if (document.cookie.includes("BestScore")) {
 document.getElementById("startButton").onclick = () => {startGame()};
 
 document.getElementById("ReprendreJeu").onclick = () => {RestartGame()};
+
+document.getElementById("LeaveGame").onclick = () => {StopGame()};
 
 // Rafraichissement du score toutes les minutes
 RefreshScore(BestScore, BestTimer);
