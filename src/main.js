@@ -29,28 +29,7 @@ let BestTimer = 0;            // Meilleur temps pour le meilleur score
 let DurationBreak = 0;        // Durée de la pause en secondes
 let DateOfLastSnakeTurn = Date.now(); // Date du dernier tour du serpent
 
-// Mettre à jour le meilleur score selon la valeur du cookie
-if (document.cookie.includes("BestScore")) {
-  const cookies = document.cookie.split("; ");
-  const bestScoreCookie = cookies.find(cookie => cookie.startsWith("BestScore="));
-  if (bestScoreCookie) {
-    BestScore = bestScoreCookie.split("=")[1];
-    document.getElementById("BestScoreDisplay").textContent = BestScore
-  }
-  const bestTimerCookie = cookies.find(cookie => cookie.startsWith("BestTimer="));
-  if (bestTimerCookie) {
-    BestTimer = bestTimerCookie.split("=")[1];
-    document.getElementById("BestTimerDisplay").textContent = BestTimer
-  }
-}
-
-// Si l'utilisateur essaie de quitter la page, on lui demande confirmation si une partie est en cours
-window.addEventListener('beforeunload', function (e) {
-  if (gameIsInProgress) {
-    e.preventDefault();
-    return 'Une parite est en cours. Êtes-vous sûr de vouloir quitter la page ?';
-  }
-});
+// Fonctions pour le jeu
 
 /**
  * Fonciton pour démarrer le jeu
@@ -71,60 +50,11 @@ function startGame()
   
   // Initialisation du score
   DateOfStart = Date.now(); // Stockage de la date de début du jeu
-
+  
   // Lancement du jeu
   gameInterval = setInterval(draw, gameSpeed); // Stockage de l'identifiant de l'intervalle
   gameIsInProgress = true;
 }
-
-document.getElementById("startButton").onclick = () => {startGame()};
-
-// Gestion des touches du clavier
-document.addEventListener("keydown", (event) => {
-  if (event.key === " " && !gameIsInProgress) {
-    // Démarrer le jeu
-    startGame();
-  }
-  else if (event.key === " " && !gameIsPaused && gameIsInProgress) {
-    // Mettre le jeu en pause
-    DurationBreak = Math.floor((Date.now() - DateOfStart)/1000);
-    gameIsPaused = true;
-
-    // Arrête le jeu
-    clearInterval(gameInterval);
-
-    // Affiche le menu de pause et cache les autres éléments
-    document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"       // Change le titre du menu de pause
-    document.getElementById("menuPause").style.display = "block"                  // Affiche le menu de pause
-    for (let element of document.getElementsByClassName("Stat")) {                // Affiche les élements de statistiques
-      element.style.display = "block"
-    }
-    document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)  // Affiche le temps écoulé
-    document.getElementById("score").textContent = score;                                       // Affiche le score actuel
-    document.getElementById("startButton").style.display = "none"                               // Cache le bouton de démarrage du jeu
-    document.getElementById("InfoReprendreLeJeu").style.display = "block"                       // Affiche l'information  pour indiquer comment reprendre le jeu
-
-    return;
-  }
-  else if (event.key === " " && gameIsPaused && gameIsInProgress) {
-    // Reprendre le jeu
-    gameIsPaused = false;
-    DateOfStart = Date.now() - DurationBreak*1000;
-    gameInterval = setInterval(draw, gameSpeed);
-    document.getElementById("menuPause").style.display = "none"
-    document.getElementById("InfoReprendreLeJeu").style.display = "none"
-    return;
-  }
-  else if ((Date.now() - DateOfLastSnakeTurn) >= (Date.now() - DateOfLastRefresh) && gameIsInProgress) {
-    direction = handleDirectionChange(event, direction);
-    DateOfLastSnakeTurn = Date.now();
-  }
-
-});
-
-// Rafraichissement du score toutes les minutes
-RefreshScore();
-let RefreshScoreProcessus = setInterval(RefreshScore, 60000);
 
 /**
  * 
@@ -263,4 +193,83 @@ function draw() {
     drawScore(ctx, score);
   }
 }
+
+/**
+ * 
+ * Gestion des touches du clavier
+ * 
+ *  */
+document.addEventListener("keydown", (event) => {
+  if (event.key === " " && !gameIsInProgress) {
+    // Démarrer le jeu
+    startGame();
+  }
+  else if (event.key === " " && !gameIsPaused && gameIsInProgress) {
+    // Mettre le jeu en pause
+    DurationBreak = Math.floor((Date.now() - DateOfStart)/1000);
+    gameIsPaused = true;
+
+    // Arrête le jeu
+    clearInterval(gameInterval);
+
+    // Affiche le menu de pause et cache les autres éléments
+    document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"       // Change le titre du menu de pause
+    document.getElementById("menuPause").style.display = "block"                  // Affiche le menu de pause
+    for (let element of document.getElementsByClassName("Stat")) {                // Affiche les élements de statistiques
+      element.style.display = "block"
+    }
+    document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)  // Affiche le temps écoulé
+    document.getElementById("score").textContent = score;                                       // Affiche le score actuel
+    document.getElementById("startButton").style.display = "none"                               // Cache le bouton de démarrage du jeu
+    document.getElementById("InfoReprendreLeJeu").style.display = "block"                       // Affiche l'information  pour indiquer comment reprendre le jeu
+
+    return;
+  }
+  else if (event.key === " " && gameIsPaused && gameIsInProgress) {
+    // Reprendre le jeu
+    gameIsPaused = false;
+    DateOfStart = Date.now() - DurationBreak*1000;
+    gameInterval = setInterval(draw, gameSpeed);
+    document.getElementById("menuPause").style.display = "none"
+    document.getElementById("InfoReprendreLeJeu").style.display = "none"
+    return;
+  }
+  else if ((Date.now() - DateOfLastSnakeTurn) >= (Date.now() - DateOfLastRefresh) && gameIsInProgress) {
+    direction = handleDirectionChange(event, direction);
+    DateOfLastSnakeTurn = Date.now();
+  }
+  
+});
+
+// Si l'utilisateur essaie de quitter la page, on lui demande confirmation si une partie est en cours
+window.addEventListener('beforeunload', function (e) {
+  if (gameIsInProgress) {
+    e.preventDefault();
+    return 'Une parite est en cours. Êtes-vous sûr de vouloir quitter la page ?';
+  }
+});
+
+// Code executé au chargement de la page
+
+// Mettre à jour le meilleur score selon la valeur du cookie
+if (document.cookie.includes("BestScore")) {
+  const cookies = document.cookie.split("; ");
+  const bestScoreCookie = cookies.find(cookie => cookie.startsWith("BestScore="));
+  if (bestScoreCookie) {
+    BestScore = bestScoreCookie.split("=")[1];
+    document.getElementById("BestScoreDisplay").textContent = BestScore
+  }
+  const bestTimerCookie = cookies.find(cookie => cookie.startsWith("BestTimer="));
+  if (bestTimerCookie) {
+    BestTimer = bestTimerCookie.split("=")[1];
+    document.getElementById("BestTimerDisplay").textContent = BestTimer
+  }
+}
+
+document.getElementById("startButton").onclick = () => {startGame()};
+
+// Rafraichissement du score toutes les minutes
+RefreshScore();
+let RefreshScoreProcessus = setInterval(RefreshScore, 60000);
+
 
