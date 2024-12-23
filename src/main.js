@@ -45,10 +45,12 @@ function startGame()
   // Au démarrage, cacher le menu de pause
   document.getElementById("menuPause").style.display = "none"
 
-  // Initialisation du serpent et de la nourriture
+  // Initialisation du serpent
   snake = initSnake();
-  food = generateFood(box, canvas);
-  
+  // Initialisation de la nourriture et vérification qu'elle n'est pas sur le serpent
+  do {
+    food = generateFood(box, canvas);
+  } while (snake.some(segment => segment.x === food.x && segment.y === food.y));
   // Initialisation du score
   DateOfStart = Date.now(); // Stockage de la date de début du jeu
   
@@ -190,8 +192,12 @@ function draw() {
     if (food.x === newHead.x && food.y === newHead.y)
     {
       score += 1;
-      food = undefined;
-      food = generateFood(box, canvas)
+
+      // Générer une nouvelle position pour la nourriture et si elle est sur le serpent, en générer une nouvelle
+      do {
+        food = generateFood(box, canvas)
+      } while (snake.some(segment => segment.x === food.x && segment.y === food.y));
+      
       snake.push({x: snake[snake.length - 1].x, 
                   y: snake[snake.length - 1].y})
     }
