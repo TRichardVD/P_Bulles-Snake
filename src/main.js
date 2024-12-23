@@ -37,7 +37,6 @@ let DateOfLastSnakeTurn = Date.now(); // Date du dernier tour du serpent
  */
 function startGame() 
 {
-
   // Réinitialisation des variables
   score = 0;
   direction = "RIGHT"
