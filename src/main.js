@@ -29,6 +29,7 @@ let BestTimer = 0;            // Meilleur temps pour le meilleur score
 let DurationBreak = 0;        // Durée de la pause en secondes
 let DateOfLastSnakeTurn = Date.now(); // Date du dernier tour du serpent
 
+
 // Fonctions pour le jeu
 
 /**
@@ -56,6 +57,9 @@ function startGame()
   gameIsInProgress = true;
 }
 
+/**
+ * Fonction pour arrêter le jeu
+ */
 function StopGame() {
   // Arrête le jeu
   gameIsInProgress = false;
@@ -159,7 +163,6 @@ function StopGame() {
  * 
  * Fonction appelée à chaque intervalle de temps pour mettre à jour le jeu.
  * 
- * @returns {void}
  */
 function draw() {  
 
@@ -200,11 +203,7 @@ function draw() {
   }
 }
 
-/**
- * 
- * Gestion des touches du clavier
- * 
- *  */
+// Gestion des touches du clavier
 document.addEventListener("keydown", (event) => {
   if (event.key === " " && !gameIsInProgress) {
     // Démarrer le jeu
@@ -248,7 +247,6 @@ document.addEventListener("keydown", (event) => {
  * 
  * Permet de redémarrer le jeu après une pause
  * 
- * @returns {void}
  */
 function RestartGame() {
   // Reprendre le jeu
