@@ -294,6 +294,8 @@ document.getElementById("ReprendreJeu").onclick = () => {RestartGame()};
 
 document.getElementById("LeaveGame").onclick = () => {StopGame()};
 
+document.getElementById("refreshScoreBoardButton").onclick = () => {RefreshScore(BestScore, BestTimer)};
+
 // Rafraichissement du score toutes les minutes
 RefreshScore(BestScore, BestTimer);
 let RefreshScoreProcessus = setInterval(() => RefreshScore(BestScore, BestTimer), 60000); // Ecrit de cette facon car RefreshScore retourne une promesse ce qui fait que setInterval ne fonctionne pas

@@ -26,6 +26,8 @@ let ScoreboardData = [];
  */
 function RefreshScore(bestScore, bestTime) {
   
+  document.getElementById("scoreBoard").classList.add("loading-border");
+
    return fetch(API_URL, {
     method: 'GET',
     headers: {
@@ -67,10 +69,17 @@ function RefreshScore(bestScore, bestTime) {
   })
   .catch(error => {
     console.error('Il y a une erreur avec le fetch : ', error);
+  })
+  .then (() => {
+    document.getElementById("scoreBoard").classList.remove("loading-border");
+  })
+  .catch(() => {
+    document.getElementById("scoreBoard").classList.remove("loading-border");
+    document.getElementById("scoreBoard").style.boxShadow = "red 0px 0px 2px";
+    setTimeout(() => {
+      document.getElementById("scoreBoard").style.border = "none";
+    }, 2000);
   });
-
-
-
 }
 
 export {

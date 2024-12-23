@@ -41,6 +41,7 @@
         box-shadow: none;
         padding : 10px;
         font-family: Kanit, Arial, Helvetica, sans-serif;
+        cursor: pointer;
         
       }
 
@@ -53,7 +54,7 @@
         display: none;
       }
 
-      .scoreBoard {
+      #scoreBoard {
         font-family: 'Kanit', 'Arial';
         position: absolute;
         top: 30px;
@@ -75,13 +76,47 @@
         font-size: 16px;
       }
 
+      #refreshScoreBoardButton {
+        margin-left: 10px;
+        cursor: pointer;
+      }
+
+      #refreshScoreBoardButton:hover {
+        transform: rotate(360deg);
+        transition-duration: 1000ms;
+      }
+
+      .loading-border {
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          box-shadow: rgb(90, 150, 0) 2px 2px;
+        }
+        25% {
+          box-shadow: rgb(158, 255, 14) -2px 2px;
+        }
+        50% {
+          box-shadow: rgb(119, 181, 28) -2px -2px;
+        }
+        70% {
+          box-shadow: rgb(90, 150, 0) 2px -2px;
+        }
+        100% {
+          box-shadow: rgb(90, 150, 0) 2px 2px;
+        }
+      }
+
+
     </style>
   </head>
   <body>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <div class="scoreBoard">
-      <h2>Tableau des scores</h2>
-      <div class="Scoreboard">
+    <div id="scoreBoard">
+      <div class="headerScoreBoard" style="display: flex; flex-direction: row;">
+        <h2>Tableau des scores</h2>
+        <img id="refreshScoreBoardButton" src="./ressources/images/refresh_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouton pour raffraichir le tableau des scores" />
+      </div>
         <ol>
           <li id="score1"></li>
           <li id="score2"></li>
@@ -89,7 +124,6 @@
           <li id="score4"></li>
           <li id="score5"></li>
         </ol>
-      </div>
       <p>Votre meilleur score : <b id="BestScoreDisplay">0</b> en <b id="BestTimerDisplay">0</b> secondes.</p>
     </div>
     <div id="menuPause">
