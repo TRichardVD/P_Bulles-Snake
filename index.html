@@ -14,12 +14,13 @@
         align-items: center;
         height: 100vh;
         margin: 0;
-        background-color: green;
+        background-color: #008000;
       }
 
       canvas {
         background-color: #fff;
         border-radius: 2px;
+        border: 2px solid black;
       }
 
       #menuPause {
@@ -27,7 +28,7 @@
         position: absolute;
         justify-content: center;
         align-items: center;
-        background-color: greenyellow;
+        background-color: #adff2f;
         padding: 30px;
         border-radius: 20px;
         text-align: center;
@@ -42,6 +43,7 @@
         padding : 10px;
         font-family: Kanit, Arial, Helvetica, sans-serif;
         cursor: pointer;
+        margin : 5px;
         
       }
 
@@ -60,9 +62,10 @@
         top: 30px;
         right: 30px;
         padding: 20px;
-        background-color: greenyellow;
+        background-color: #adff2f;
         border-radius: 20px;
         text-align: center;
+        display: none;
       }
 
       #ReprendreJeu {
@@ -91,7 +94,7 @@
       }
       @keyframes spin {
         0% {
-          box-shadow: rgb(90, 150, 0) 2px 2px;
+          box-shadow: rgb(209, 247, 151) 2px 2px;
         }
         25% {
           box-shadow: rgb(158, 255, 14) -2px 2px;
@@ -100,18 +103,69 @@
           box-shadow: rgb(119, 181, 28) -2px -2px;
         }
         70% {
-          box-shadow: rgb(90, 150, 0) 2px -2px;
+          box-shadow: rgb(201, 255, 119) 2px -2px;
         }
         100% {
-          box-shadow: rgb(90, 150, 0) 2px 2px;
+          box-shadow: rgb(104, 135, 57) 2px 2px;
         }
       }
 
+      #GameView {
+        display : flex;
+        flex-direction: column;
+        
+      }
+
+      header {
+        background-color: whitesmoke;
+        border-radius: 30px;
+        padding: 5px 10px 5px 10px;
+        margin: 5px;
+        height: 30px; 
+        display: flex; 
+        flex-direction: row; 
+        justify-content:space-between; 
+        align-content: center;
+        border : 2px solid black;
+      }
+      nav {
+        padding: 0 3px 0 3px;
+      }
+      nav img {
+        cursor: pointer;
+      }
+
+      #settings {
+        display: none;
+        position: absolute;
+        top: center;
+        left: center;
+        background-color: #adff2f;
+        border-radius: 20px;
+        padding: 20px;
+        font-family: 'Kanit', 'Arial';
+      }
+      fieldset {
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
+
+      }
 
     </style>
   </head>
   <body>
+    <div id="GameView">
+      <header>
+        <img src="./ressources/images/logoSnake.png" alt="Logo du jeu du serpent" height="30px"/>
+        <h1 style="font-size: 20px; text-align: center; padding: 0; line-height: 0;">Jeu du Serpent</h1>
+        <nav style="">
+          <img id="buttonSettings" src="./ressources/images/settings_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouuton pour accéder aux paramètres">
+          <img id="buttonScoreboard" src="./ressources/images/trophy_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouton pour afficher ou cacher le tableau des scores">
+        </nav>
+      </header>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
+  </div>
     <div id="scoreBoard">
       <div class="headerScoreBoard" style="display: flex; flex-direction: row;">
         <h2>Tableau des scores</h2>
@@ -134,6 +188,38 @@
       <button type="button" id="ReprendreJeu">Reprendre la partie</button>
       <button type="button" id="LeaveGame">Recommencer la partie</button>
     </div>
+
+    <div id="settings">
+      <div id="settingsHeader" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content:space-between;">
+        <h2>Paramètres</h2>
+        <img id="closeSettings" style="cursor: pointer;" src="./ressources/images/close_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouton pour fermer les paramètres">
+      </div>
+      <div class="allSettings" style="display: flex; flex-direction: column;">
+
+        <fieldset>
+          <legend>Paramètres du jeu en général</legend>
+          <em>Attention : Certains de ces paramètres seront pris en compte uniquement à partir de la prochaine partie</em>
+          <label for="GamespeedSet">Vitesse du jeu (en milliseconde)</label>
+          <input type="number" id="GamespeedSet" min="100" max="1000" value="200" />
+          
+        </fieldset>
+
+        <fieldset>
+          <legend>Graphiques du jeu</legend>
+
+          <label for="backgroundColorSet">Couleur de l'arrière plan</label>
+          <input type="color" id="backgroundColorSet" value="#008000" />
+
+          <label for="ColorBgMenuSet">Couleur de fond des menus</label>
+          <input type="color" id="ColorBgMenuSet" value="#006400">
+        </fieldset>
+
+
+        <button id="SaveSettings">Sauvegarder</button>
+        <button id="ResetSettings">Réinitialiser</button>
+      </div>
+    </div>
+
     <script type="module" src="./src/main.js"></script>
   </body>
 </html>

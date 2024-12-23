@@ -10,7 +10,8 @@ const ctx = canvas.getContext("2d");
 
 // Variables du jeu
 const box = 20;               // Taille d'une case en pixels
-const gameSpeed = 200;        // Vitesse du jeu en ms
+let gameSpeed = 200;        // Vitesse du jeu en ms
+let newSpeed = 200;         // Nouvelle vitesse du jeu en ms afin d'éviter le changement de vitesse en cours de jeu ce qui est de la triche
 let snake;                    // Serpent du jeu
 let food;                     // Nourriture du jeu
 let direction = "RIGHT";      // Direction du serpent
@@ -29,6 +30,9 @@ let BestTimer = 0;            // Meilleur temps pour le meilleur score
 let DurationBreak = 0;        // Durée de la pause en secondes
 let DateOfLastSnakeTurn = Date.now(); // Date du dernier tour du serpent
 
+// Variables de style
+let currentBgColor = '#008000';      // couleur de fond par défaut
+let currentMenuBgColor = '#adff2f';  // couleur menu par défaut
 
 // Fonctions pour le jeu
 
@@ -38,6 +42,7 @@ let DateOfLastSnakeTurn = Date.now(); // Date du dernier tour du serpent
 function startGame() 
 {
   // Réinitialisation des variables
+  gameSpeed = newSpeed;
   score = 0;
   direction = "RIGHT"
 
@@ -208,6 +213,27 @@ function draw() {
   }
 }
 
+function ToPause() {
+  DurationBreak = Math.floor((Date.now() - DateOfStart)/1000);
+  gameIsPaused = true;
+
+  // Arrête le jeu
+  clearInterval(gameInterval);
+
+  // Affiche le menu de pause et cache les autres éléments
+  document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"       // Change le titre du menu de pause
+  document.getElementById("menuPause").style.display = "block"                  // Affiche le menu de pause
+  for (let element of document.getElementsByClassName("Stat")) {                // Affiche les élements de statistiques
+    element.style.display = "block"
+  }
+  document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)  // Affiche le temps écoulé
+  document.getElementById("score").textContent = score;                                       // Affiche le score actuel
+  document.getElementById("startButton").style.display = "none"                               // Cache le bouton de démarrage du jeu
+  document.getElementById("ReprendreJeu").style.display = "block"                             // Affiche le bouton pour reprendre le jeu
+  document.getElementById("LeaveGame").style.display = "block"                             // Affiche le bouton pour relancer le jeu
+
+}
+
 // Gestion des touches du clavier
 document.addEventListener("keydown", (event) => {
   if (event.key === " " && !gameIsInProgress) {
@@ -216,24 +242,7 @@ document.addEventListener("keydown", (event) => {
   }
   else if (event.key === " " && !gameIsPaused && gameIsInProgress) {
     // Mettre le jeu en pause
-    DurationBreak = Math.floor((Date.now() - DateOfStart)/1000);
-    gameIsPaused = true;
-
-    // Arrête le jeu
-    clearInterval(gameInterval);
-
-    // Affiche le menu de pause et cache les autres éléments
-    document.getElementById("PauseMenuTitle").textContent = "Menu de Pause"       // Change le titre du menu de pause
-    document.getElementById("menuPause").style.display = "block"                  // Affiche le menu de pause
-    for (let element of document.getElementsByClassName("Stat")) {                // Affiche les élements de statistiques
-      element.style.display = "block"
-    }
-    document.getElementById("timer").textContent = Math.floor((Date.now() - DateOfStart)/1000)  // Affiche le temps écoulé
-    document.getElementById("score").textContent = score;                                       // Affiche le score actuel
-    document.getElementById("startButton").style.display = "none"                               // Cache le bouton de démarrage du jeu
-    document.getElementById("ReprendreJeu").style.display = "block"                             // Affiche le bouton pour reprendre le jeu
-    document.getElementById("LeaveGame").style.display = "block"                             // Affiche le bouton pour relancer le jeu
-
+    ToPause();
     return;
   }
   else if (event.key === " " && gameIsPaused && gameIsInProgress) {
@@ -300,6 +309,77 @@ document.getElementById("ReprendreJeu").onclick = () => {RestartGame()};
 document.getElementById("LeaveGame").onclick = () => {StopGame()};
 
 document.getElementById("refreshScoreBoardButton").onclick = () => {RefreshScore(BestScore, BestTimer)};
+
+document.getElementById("buttonSettings").onclick = () => {
+  if (gameIsInProgress) {
+    ToPause();
+  }
+
+
+  const Scoreboard = document.getElementById("settings");
+  const display = Scoreboard.style.display;
+  if (display === 'none' || display === '') {
+    Scoreboard.style.display = 'block'
+  }
+  else {
+    Scoreboard.style.display = 'none'
+  }
+
+  document.getElementById("GamespeedSet").value = newSpeed;
+  document.getElementById("backgroundColorSet").value = currentBgColor;
+  document.getElementById("ColorBgMenuSet").value = currentMenuBgColor;
+
+}
+
+document.getElementById("SaveSettings").onclick = () => {
+  newSpeed = document.getElementById("GamespeedSet").value;
+
+  currentBgColor = document.getElementById("backgroundColorSet").value;
+  document.getElementsByTagName("body")[0].style.backgroundColor = document.getElementById("backgroundColorSet").value;
+
+  document.getElementById("settings").style.backgroundColor = document.getElementById("ColorBgMenuSet").value;
+  document.getElementById("menuPause").style.backgroundColor = document.getElementById("ColorBgMenuSet").value;
+  document.getElementById("scoreBoard").style.backgroundColor = document.getElementById("ColorBgMenuSet").value;
+
+  document.getElementById("settings").style.display = 'none';
+  if (gameIsInProgress) {
+    RestartGame();
+  }
+}
+
+document.getElementById("ResetSettings").onclick = () => {
+  newSpeed = 200;
+  document.getElementById("GamespeedSet").value = 200;
+
+  document.getElementById("backgroundColorSet").value = "#008000";
+  document.getElementsByTagName("body")[0].style.backgroundColor = "#008000";
+  currentBgColor = "#008000";
+
+  document.getElementById("ColorBgMenuSet").value = "#adff2f";
+  currentMenuBgColor = "#adff2f";
+  document.getElementById("settings").style.backgroundColor = "#adff2f";
+  document.getElementById("menuPause").style.backgroundColor = "#adff2f";
+  document.getElementById("scoreBoard").style.backgroundColor = "#adff2f";
+
+}
+
+document.getElementById("buttonScoreboard").onclick = () => {
+  const Scoreboard = document.getElementById("scoreBoard");
+  const display = Scoreboard.style.display;
+  if (display === 'none' || display === '') {
+    Scoreboard.style.display = 'block'
+  }
+  else {
+    Scoreboard.style.display = 'none'
+  }
+};
+
+document.getElementById("closeSettings").onclick = () => {
+  if (gameIsInProgress) {
+    RestartGame();
+  }
+  document.getElementById("settings").style.display = 'none';
+}
 
 // Rafraichissement du score toutes les minutes
 RefreshScore(BestScore, BestTimer);
