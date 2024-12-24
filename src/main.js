@@ -10,8 +10,8 @@ const ctx = canvas.getContext("2d");
 
 // Variables du jeu
 const box = 20;               // Taille d'une case en pixels
-let gameSpeed = 200;        // Vitesse du jeu en ms
-let newSpeed = 200;         // Nouvelle vitesse du jeu en ms afin d'éviter le changement de vitesse en cours de jeu ce qui est de la triche
+let gameSpeed = 200;          // Vitesse du jeu en ms
+let newSpeed = 200;           // Nouvelle vitesse du jeu en ms afin d'éviter le changement de vitesse en cours de jeu ce qui est de la triche
 let snake;                    // Serpent du jeu
 let food;                     // Nourriture du jeu
 let direction = "RIGHT";      // Direction du serpent
@@ -383,5 +383,5 @@ document.getElementById("closeSettings").onclick = () => {
 
 // Rafraichissement du score toutes les minutes
 RefreshScore(BestScore, BestTimer);
-let RefreshScoreProcessus = setInterval(() => RefreshScore(BestScore, BestTimer), 60000); // Ecrit de cette facon car RefreshScore retourne une promesse ce qui fait que setInterval ne fonctionne pas
+let RefreshScoreProcessus = setInterval(() => RefreshScore(BestScore, BestTimer), 60000);
 
