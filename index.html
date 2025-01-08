@@ -8,6 +8,10 @@
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
       
+      h1 {
+        font-family: Kanit, Arial, Helvetica, sans-serif;
+      }
+
       body {
         display: flex;
         justify-content: center;
@@ -43,8 +47,7 @@
         padding : 10px;
         font-family: Kanit, Arial, Helvetica, sans-serif;
         cursor: pointer;
-        margin : 5px;
-        
+        margin : 5px 0 5px 0;
       }
 
       button:hover {
@@ -71,12 +74,14 @@
       #ReprendreJeu {
         display: none;
         font-size: 16px;
-        font-weight: bold;
+        font-weight: 500;
       }
 
       #LeaveGame {
         display: none;
         font-size: 16px;
+        font-weight: 300;
+        padding: 5px;
       }
 
       #refreshScoreBoardButton {
@@ -94,19 +99,19 @@
       }
       @keyframes spin {
         0% {
-          box-shadow: rgb(209, 247, 151) 2px 2px;
+          box-shadow: rgb(62, 255, 3) 3px 3px;
         }
         25% {
-          box-shadow: rgb(158, 255, 14) -2px 2px;
+          box-shadow: rgb(115, 255, 143) -3px 3px;
         }
         50% {
-          box-shadow: rgb(119, 181, 28) -2px -2px;
+          box-shadow: rgb(62, 255, 3) -2px -3px;
         }
         70% {
-          box-shadow: rgb(201, 255, 119) 2px -2px;
+          box-shadow: rgb(26, 255, 76) 3px -3px;
         }
         100% {
-          box-shadow: rgb(104, 135, 57) 2px 2px;
+          box-shadow: rgb(62, 255, 3) 3px 3px;
         }
       }
 
@@ -125,8 +130,9 @@
         display: flex; 
         flex-direction: row; 
         justify-content:space-between; 
-        align-content: center;
+        align-items: center;
         border : 2px solid black;
+        
       }
       nav {
         padding: 0 3px 0 3px;
@@ -152,6 +158,14 @@
 
       }
 
+      .errForm {
+        color : red;
+        font-size: small;
+        padding : 0;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
     </style>
   </head>
   <body>
@@ -160,8 +174,8 @@
         <img src="./ressources/images/logoSnake.png" alt="Logo du jeu du serpent" height="30px"/>
         <h1 style="font-size: 20px; text-align: center; padding: 0; line-height: 0;">Jeu du Serpent</h1>
         <nav style="">
-          <img id="buttonSettings" src="./ressources/images/settings_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouuton pour accéder aux paramètres">
-          <img id="buttonScoreboard" src="./ressources/images/trophy_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouton pour afficher ou cacher le tableau des scores">
+          <img id="buttonSettings" src="./ressources/images/settings_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouuton pour accéder aux paramètres">
+          <img id="buttonScoreboard" src="./ressources/images/trophy_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouton pour afficher ou cacher le tableau des scores">
         </nav>
       </header>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
@@ -169,7 +183,7 @@
     <div id="scoreBoard">
       <div class="headerScoreBoard" style="display: flex; flex-direction: row;">
         <h2>Tableau des scores</h2>
-        <img id="refreshScoreBoardButton" src="./ressources/images/refresh_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouton pour raffraichir le tableau des scores" />
+        <img id="refreshScoreBoardButton" src="./ressources/images/refresh_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouton pour raffraichir le tableau des scores" />
       </div>
         <ol>
           <li id="score1"></li>
@@ -201,7 +215,7 @@
           <em>Attention : Certains de ces paramètres seront pris en compte uniquement à partir de la prochaine partie</em>
           <label for="GamespeedSet">Vitesse du jeu (en milliseconde)</label>
           <input type="number" id="GamespeedSet" min="100" max="1000" value="200" />
-          
+          <p id="GamespeedErrorSetting" class="errForm" style="display: none;"> La vitesse du jeu ne peux pas être plus grande que 1000 ou plus petite que 20 !</p>
         </fieldset>
 
         <fieldset>

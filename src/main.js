@@ -318,12 +318,14 @@ document.getElementById("buttonSettings").onclick = () => {
 
   const Scoreboard = document.getElementById("settings");
   const display = Scoreboard.style.display;
-  if (display === 'none' || display === '') {
+  if (display === 'none' || display === 'None' || display === '') {
     Scoreboard.style.display = 'block'
   }
   else {
     Scoreboard.style.display = 'none'
   }
+
+  document.getElementById("GamespeedErrorSetting").style.display = "none"
 
   document.getElementById("GamespeedSet").value = newSpeed;
   document.getElementById("backgroundColorSet").value = currentBgColor;
@@ -332,6 +334,13 @@ document.getElementById("buttonSettings").onclick = () => {
 }
 
 document.getElementById("SaveSettings").onclick = () => {
+
+  if (document.getElementById("GamespeedSet").value <= 20 || document.getElementById("GamespeedSet").value >= 1000)
+  {
+  document.getElementById("GamespeedErrorSetting").style.display = "block";
+    return;
+  }
+
   newSpeed = document.getElementById("GamespeedSet").value;
 
   currentBgColor = document.getElementById("backgroundColorSet").value;
