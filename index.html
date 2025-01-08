@@ -68,7 +68,6 @@
         background-color: #adff2f;
         border-radius: 20px;
         text-align: center;
-        display: none;
       }
 
       #ReprendreJeu {
@@ -173,14 +172,14 @@
       <header>
         <img src="./ressources/images/logoSnake.png" alt="Logo du jeu du serpent" height="30px"/>
         <h1 style="font-size: 20px; text-align: center; padding: 0; line-height: 0;">Jeu du Serpent</h1>
-        <nav style="">
+        <nav>
           <img id="buttonSettings" src="./ressources/images/settings_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouuton pour accéder aux paramètres">
           <img id="buttonScoreboard" src="./ressources/images/trophy_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouton pour afficher ou cacher le tableau des scores">
         </nav>
       </header>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
   </div>
-    <div id="scoreBoard">
+    <div id="scoreBoard" style="display: block;">
       <div class="headerScoreBoard" style="display: flex; flex-direction: row;">
         <h2>Tableau des scores</h2>
         <img id="refreshScoreBoardButton" src="./ressources/images/refresh_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouton pour raffraichir le tableau des scores" />
