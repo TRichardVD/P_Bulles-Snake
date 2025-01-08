@@ -92,8 +92,10 @@ function StopGame() {
   else if (DurationGame > BestTimer && score === BestScore) {
     BestTimer = DurationGame;
     document.getElementById("BestTimerDisplay").textContent = BestTimer;
-    document.cookie = `BestTimer=${BestTimer};`
-    document.cookie = `BestScore=${BestScore};`
+
+    const MaxAgeCookie = 365 * 24 * 60 * 60;
+    document.cookie = `BestTimer=${BestTimer}; Max-Age=${MaxAgeCookie}; Path=/`;
+    document.cookie = `BestScore=${BestScore}; Max-Age=${MaxAgeCookie} Path=/`
   }
 
   // Envoi du score au serveur si le score a battu un des 5 meilleurs scores et supprime le plus petit score pour toujours en avoir 5
@@ -188,10 +190,9 @@ function draw() {
   if (checkCollision(newHead, snake) || checkWallCollision(newHead, canvas, box))
     {
       StopGame();
-
       return;
     }
-  else {
+
     // Vérifie si le serpent a mangé la nourriture
     if (food.x === newHead.x && food.y === newHead.y)
     {
@@ -210,7 +211,7 @@ function draw() {
     drawSnake(ctx, snake, box);
     drawFood(ctx, food, box);
     drawScore(ctx, score);
-  }
+  
 }
 
 function ToPause() {
