@@ -69,11 +69,12 @@ Le code source est organisé dans un répertoire `src/` pour séparer les fichie
 ### Prérequis
 
 - **Node.js** : Assurez-vous que Node.js est installé sur votre machine.
+- **Json API** : Assurez-vous d'avoir une API correctment configuré en suivant [les étapes d'installations suivantes](#installation)
 
-### Installation
+### Installation de l'API
 
 Modifier les clé API et autres informations sur votre API dans le fichier `config.js`
-> *API json recommandée et testée sur cette application : [jsonbin.io](https://jsonbin.io/)*
+> *API json recommandée et testée sur cette application : [jsonbin.io](https://jsonbin.io/)* les étapes pour configurer cette API sont décrite dans [ce document](./annexes/jsonbinInstallation.md)
 1. Renommez le fichier `config.js.example` en `config.js`
     Le fichier est censé contenir ceci : 
 ```javascript
