@@ -44,6 +44,10 @@ Le code source est organisé dans un répertoire `src/` pour séparer les fichie
 ├── package.json
 ├── README.md
 ├── vite.config.js
+├── annexes
+    ├── PrisesDeNote
+    ├── jsonbinInstallation.md
+    └── PromptsIA.md
 └── src/
     ├── main.js
     ├── snake.js
