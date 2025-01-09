@@ -17,7 +17,7 @@
 ```
 3. Sauvegarder l'identifiant de votre "Bin" (BIN ID)
 4. Récuprérer la clé *X-MASTER-KEY* depuis l'onglet [API KEYS](https://jsonbin.io/app/app/api-keys)
-5. Dans le fichier `congig.js` dans le dossier `\src` entrez le contenu suivant en remplacant les valeurs sauvegarder (écrit entre `<>`)
+5. Dans le fichier `config.js` dans le dossier `\src` entrez le contenu suivant en remplacant les valeurs sauvegarder (écrit entre `<>`)
 ```Javascript
 export const API_URL = 'https://api.jsonbin.io/v3/b/<BIN ID>';
 export const API_TOKEN = '<X-MASTER-KEY>';
