@@ -102,3 +102,7 @@ npm run dev
 ```
 
 Le projet sera servi localement à l'adresse `http://localhost:3000`.
+
+## Annexes et aide à la réalisation du projet
+* [Prise de note sur les cours suivis en JS](./annexes/PrisesDeNote/Javascript.md)
+* [Prise de note sur les cours suivis sur Git](./annexes/PrisesDeNote/Git.md)
