@@ -1,3 +1,5 @@
+# Git : Prise de note
+> Compléter avec ChatGPT
 ## C'est quoi ?
 Git est un outil qui permet de suivre les modifications d’un projet et de travailler à plusieurs dessus sans se marcher sur les pieds.
 Il est complété par des plateformes comme GitHub ou GitLab par exemple, qui permettent de stocker le projet en ligne, de partager facilement le travail avec d’autres personnes et d’organiser la collaboration. Ces plateformes ajoutent aussi des outils pour automatiser certaines tâches, comme vérifier que le code fonctionne bien ou qu’il n’a pas d’erreurs, ce qui rend le travail encore plus efficace.
@@ -5,7 +7,7 @@ Il s’utilise principalement en ligne de commande, où l’on tape des instruct
 ## Fonctionnement de Git
 Git est un système de gestion de versions qui permet de suivre l’évolution de vos fichiers et de collaborer à plusieurs sur un projet. Imaginez que vous commencez par créer un “répertoire distant” (un repository) où vous stockez tout le code source : c’est un peu comme si vous ouvriez un grand classeur pour ranger vos documents. Ensuite, chaque fois que vous apportez une modification à vos fichiers (par exemple corriger un bug ou ajouter une nouvelle fonctionnalité), vous “commitez” vos changements, ce qui crée un instantané de la progression : c’est un peu comme prendre une photo à un moment précis pour voir l’état du projet à cet instant. Pour travailler sereinement et éviter les conflits, vous pouvez créer une “branche” (branch), qui est comme un chemin parallèle pour tester vos idées sans perturber le travail principal. Lorsque vous êtes satisfait de vos changements, vous pouvez “merger” (fusionner) cette branche avec la branche principale (souvent appelée “main” ou “master”) afin d’intégrer vos modifications. Une fois que vous estimez que votre projet est stable et prêt à être partagé (par exemple pour publier une nouvelle fonctionnalité), vous pouvez créer une “release”, c’est-à-dire une version identifiée du projet. Si vous travaillez avec d’autres personnes et que vous souhaitez proposer vos changements, vous soumettez une “pull request” : c’est une demande pour que quelqu’un d’autre revoie et approuve votre contribution avant qu’elle ne soit fusionnée au code principal. Tout au long de ce processus, vous pourrez “pousser” (push) vos modifications vers le serveur distant et “tirer” (pull) les dernières mises à jour faites par vos coéquipiers, garantissant que tout le monde reste synchronisé sur la version la plus récente du projet.
 ## Les commandes à absolument connaitre
-prise de note de base (moins complète) : git : Toutes les commandes essentielles
+prise de note de base (moins complète) : [git : Toutes les commandes essentielles](git%20%253A%20Toutes%20les%20commandes%20essentielles.md)
 ## Prise de notes sur les commandes Git essentielles
 ### 1. `git init`
 Description  
@@ -115,7 +117,7 @@ Points à faire attention
 `--amend` réécrit l’historique, évitez de l’utiliser si le commit précédent est déjà poussé sur un dépôt distant.
 Astuce
 Utiliser des messages de commit clairs et descriptifs pour faciliter le suivi de l’historique.
-Préfixez vos messages (feat, fix, docs, chore, etc.) si vous utilisez un standard de convention de commit (Ex: Conventional Commits). (Normes commit Conventionnels)
+Préfixez vos messages (feat, fix, docs, chore, etc.) si vous utilisez un standard de convention de commit (Ex: Conventional Commits). ([Normes commit Conventionnels](./Normes%20commit%20Conventionnels.md))
 ### 6. `git log`
 Description
 Affiche l’historique des commits.

@@ -1,3 +1,4 @@
+# C'est quoi le timestamp ?
 Le timestamp est un système qui représente une date et une heure sous forme d'un nombre entier, correspondant au nombre de secondes écoulées depuis le 1er janvier 1970 à 00h00:00. C'est une méthode universelle et pratique en informatique pour enregistrer et manipuler des dates.
 Par exemple :
 Le timestamp 0 correspond au 1er janvier 1970 à 00:00:00
