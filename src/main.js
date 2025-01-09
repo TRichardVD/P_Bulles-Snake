@@ -4,12 +4,13 @@ import { handleDirectionChange } from "./controls.js";
 import { checkCollision, checkWallCollision } from "./collision.js";
 import { drawScore, RefreshScore, ScoreboardData} from "./score.js";
 import { API_URL, API_TOKEN } from './config.js';
+import defaultConfig from '../config.json';
 
 const canvas = document.getElementById("gameCanvas"); 
 const ctx = canvas.getContext("2d");
 
 // Variables du jeu
-const box = 20;               // Taille d'une case en pixels
+let box = 20;               // Taille d'une case en pixels
 let gameSpeed = 200;          // Vitesse du jeu en ms
 let newSpeed = 200;           // Nouvelle vitesse du jeu en ms afin d'éviter le changement de vitesse en cours de jeu ce qui est de la triche
 let snake;                    // Serpent du jeu
@@ -35,6 +36,23 @@ let currentBgColor = '#008000';      // couleur de fond par défaut
 let currentMenuBgColor = '#adff2f';  // couleur menu par défaut
 
 // Fonctions pour le jeu
+
+/**
+ * Fonction pour charger les 
+ */
+async function LoadDeafaultSettings() {
+  box = defaultConfig.boxSize;
+  newSpeed = defaultConfig.gameSpeed;
+
+  currentBgColor = defaultConfig.BgColor;
+  document.getElementsByTagName("body")[0].style.backgroundColor = currentBgColor;
+
+  currentMenuBgColor = defaultConfig.MenuBgColor;
+  for (const element of document.getElementsByClassName("menu"))
+  {
+    element.style.backgroundColor = currentMenuBgColor
+  }
+}
 
 /**
  * Fonciton pour démarrer le jeu
@@ -110,7 +128,7 @@ function StopGame() {
    });
     
    // Vérifie si le score actuel est supérieur à un des 5 meilleurs scores ou si il y a moins que 5 scores
-    if (score > ScoreboardData[4].score || (score === ScoreboardData[4].score && DurationGame < ScoreboardData[4].timer || ScoreboardData.length < 5)) {
+    if (ScoreboardData.length < 5 || score > ScoreboardData[4].score || (score === ScoreboardData[4].score && DurationGame < ScoreboardData[4].timer)) {
       
        // Supprime le score le plus bas si il y a déjà 5 scores
       if (ScoreboardData.length >= 5) {
@@ -286,23 +304,6 @@ window.addEventListener('beforeunload', function (e) {
   }
 });
 
-// Code executé au chargement de la page
-
-// Mettre à jour le meilleur score selon la valeur du cookie
-if (document.cookie.includes("BestScore")) {
-  const cookies = document.cookie.split("; ");
-  const bestScoreCookie = cookies.find(cookie => cookie.startsWith("BestScore="));
-  if (bestScoreCookie) {
-    BestScore = bestScoreCookie.split("=")[1];
-    document.getElementById("BestScoreDisplay").textContent = BestScore
-  }
-  const bestTimerCookie = cookies.find(cookie => cookie.startsWith("BestTimer="));
-  if (bestTimerCookie) {
-    BestTimer = bestTimerCookie.split("=")[1];
-    document.getElementById("BestTimerDisplay").textContent = BestTimer
-  }
-}
-
 document.getElementById("startButton").onclick = () => {startGame()};
 
 document.getElementById("ReprendreJeu").onclick = () => {RestartGame()};
@@ -358,18 +359,15 @@ document.getElementById("SaveSettings").onclick = () => {
 }
 
 document.getElementById("ResetSettings").onclick = () => {
-  newSpeed = 200;
-  document.getElementById("GamespeedSet").value = 200;
 
-  document.getElementById("backgroundColorSet").value = "#008000";
-  document.getElementsByTagName("body")[0].style.backgroundColor = "#008000";
-  currentBgColor = "#008000";
+  LoadDeafaultSettings();
 
-  document.getElementById("ColorBgMenuSet").value = "#adff2f";
-  currentMenuBgColor = "#adff2f";
-  document.getElementById("settings").style.backgroundColor = "#adff2f";
-  document.getElementById("menuPause").style.backgroundColor = "#adff2f";
-  document.getElementById("scoreBoard").style.backgroundColor = "#adff2f";
+  document.getElementById("GamespeedSet").value = gameSpeed;
+
+  document.getElementById("backgroundColorSet").value = currentBgColor;
+
+  document.getElementById("ColorBgMenuSet").value = currentMenuBgColor;
+
 
 }
 
@@ -389,6 +387,26 @@ document.getElementById("closeSettings").onclick = () => {
     RestartGame();
   }
   document.getElementById("settings").style.display = 'none';
+}
+
+
+// Code executé au chargement de la page
+// Chargement des paramètres par défaut
+await LoadDeafaultSettings();
+
+// Mettre à jour le meilleur score selon la valeur du cookie
+if (document.cookie.includes("BestScore")) {
+  const cookies = document.cookie.split("; ");
+  const bestScoreCookie = cookies.find(cookie => cookie.startsWith("BestScore="));
+  if (bestScoreCookie) {
+    BestScore = bestScoreCookie.split("=")[1];
+    document.getElementById("BestScoreDisplay").textContent = BestScore
+  }
+  const bestTimerCookie = cookies.find(cookie => cookie.startsWith("BestTimer="));
+  if (bestTimerCookie) {
+    BestTimer = bestTimerCookie.split("=")[1];
+    document.getElementById("BestTimerDisplay").textContent = BestTimer
+  }
 }
 
 // Rafraichissement du score toutes les minutes

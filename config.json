@@ -1,0 +1,7 @@
+{
+    "gameSpeed" : 200,
+    "boxSize" : 20,
+    "BgColor" : "#008000",
+    "MenuBgColor" : "#adff2f"
+
+}

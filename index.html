@@ -27,12 +27,16 @@
         border: 2px solid black;
       }
 
+      .menu {
+        background-color: #adff2f;
+      }
+
       #menuPause {
         font-family: 'Kanit', 'Arial';
         position: absolute;
         justify-content: center;
         align-items: center;
-        background-color: #adff2f;
+
         padding: 30px;
         border-radius: 20px;
         text-align: center;
@@ -65,7 +69,6 @@
         top: 30px;
         right: 30px;
         padding: 20px;
-        background-color: #adff2f;
         border-radius: 20px;
         text-align: center;
       }
@@ -145,7 +148,6 @@
         position: absolute;
         top: center;
         left: center;
-        background-color: #adff2f;
         border-radius: 20px;
         padding: 20px;
         font-family: 'Kanit', 'Arial';
@@ -179,7 +181,7 @@
       </header>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
   </div>
-    <div id="scoreBoard" style="display: block;">
+    <div id="scoreBoard" class="menu" style="display: block;">
       <div class="headerScoreBoard" style="display: flex; flex-direction: row;">
         <h2>Tableau des scores</h2>
         <img id="refreshScoreBoardButton" src="./ressources/images/refresh_24dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouton pour raffraichir le tableau des scores" />
@@ -193,7 +195,7 @@
         </ol>
       <p>Votre meilleur score : <b id="BestScoreDisplay">0</b> en <b id="BestTimerDisplay">0</b> secondes.</p>
     </div>
-    <div id="menuPause">
+    <div id="menuPause" class="menu">
       <h2 id="PauseMenuTitle">Bienvenue</h2>
       <p class="Stat">Votre score est de : <span id="score"></span></p>
       <p class="Stat">Temps écoulé : <span id="timer"></span> secondes</p>
@@ -202,7 +204,7 @@
       <button type="button" id="LeaveGame">Recommencer la partie</button>
     </div>
 
-    <div id="settings">
+    <div id="settings" class="menu">
       <div id="settingsHeader" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content:space-between;">
         <h2>Paramètres</h2>
         <img id="closeSettings" style="cursor: pointer;" src="./ressources/images/close_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg" alt="Bouton pour fermer les paramètres">
