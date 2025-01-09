@@ -10,8 +10,8 @@ const ctx = canvas.getContext("2d");
 
 // Variables du jeu
 const box = 20;               // Taille d'une case en pixels
-let gameSpeed = 200;        // Vitesse du jeu en ms
-let newSpeed = 200;         // Nouvelle vitesse du jeu en ms afin d'éviter le changement de vitesse en cours de jeu ce qui est de la triche
+let gameSpeed = 200;          // Vitesse du jeu en ms
+let newSpeed = 200;           // Nouvelle vitesse du jeu en ms afin d'éviter le changement de vitesse en cours de jeu ce qui est de la triche
 let snake;                    // Serpent du jeu
 let food;                     // Nourriture du jeu
 let direction = "RIGHT";      // Direction du serpent
@@ -92,8 +92,10 @@ function StopGame() {
   else if (DurationGame > BestTimer && score === BestScore) {
     BestTimer = DurationGame;
     document.getElementById("BestTimerDisplay").textContent = BestTimer;
-    document.cookie = `BestTimer=${BestTimer};`
-    document.cookie = `BestScore=${BestScore};`
+
+    const MaxAgeCookie = 365 * 24 * 60 * 60;
+    document.cookie = `BestTimer=${BestTimer}; Max-Age=${MaxAgeCookie}; Path=/`;
+    document.cookie = `BestScore=${BestScore}; Max-Age=${MaxAgeCookie} Path=/`
   }
 
   // Envoi du score au serveur si le score a battu un des 5 meilleurs scores et supprime le plus petit score pour toujours en avoir 5
@@ -188,10 +190,9 @@ function draw() {
   if (checkCollision(newHead, snake) || checkWallCollision(newHead, canvas, box))
     {
       StopGame();
-
       return;
     }
-  else {
+
     // Vérifie si le serpent a mangé la nourriture
     if (food.x === newHead.x && food.y === newHead.y)
     {
@@ -210,7 +211,7 @@ function draw() {
     drawSnake(ctx, snake, box);
     drawFood(ctx, food, box);
     drawScore(ctx, score);
-  }
+  
 }
 
 function ToPause() {
@@ -318,12 +319,14 @@ document.getElementById("buttonSettings").onclick = () => {
 
   const Scoreboard = document.getElementById("settings");
   const display = Scoreboard.style.display;
-  if (display === 'none' || display === '') {
+  if (display === 'none' || display === 'None' || display === '') {
     Scoreboard.style.display = 'block'
   }
   else {
     Scoreboard.style.display = 'none'
   }
+
+  document.getElementById("GamespeedErrorSetting").style.display = "none"
 
   document.getElementById("GamespeedSet").value = newSpeed;
   document.getElementById("backgroundColorSet").value = currentBgColor;
@@ -332,6 +335,13 @@ document.getElementById("buttonSettings").onclick = () => {
 }
 
 document.getElementById("SaveSettings").onclick = () => {
+
+  if (document.getElementById("GamespeedSet").value <= 20 || document.getElementById("GamespeedSet").value >= 1000)
+  {
+  document.getElementById("GamespeedErrorSetting").style.display = "block";
+    return;
+  }
+
   newSpeed = document.getElementById("GamespeedSet").value;
 
   currentBgColor = document.getElementById("backgroundColorSet").value;
@@ -383,5 +393,5 @@ document.getElementById("closeSettings").onclick = () => {
 
 // Rafraichissement du score toutes les minutes
 RefreshScore(BestScore, BestTimer);
-let RefreshScoreProcessus = setInterval(() => RefreshScore(BestScore, BestTimer), 60000); // Ecrit de cette facon car RefreshScore retourne une promesse ce qui fait que setInterval ne fonctionne pas
+let RefreshScoreProcessus = setInterval(() => RefreshScore(BestScore, BestTimer), 60000);
 
