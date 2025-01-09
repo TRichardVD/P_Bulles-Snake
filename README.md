@@ -50,7 +50,7 @@ Le code source est organisé dans un répertoire `src/` pour séparer les fichie
     ├── food.js
     ├── controls.js
     ├── collision.js
-    └── score.js
+    ├── score.js
     └── config.js
 ```
 
