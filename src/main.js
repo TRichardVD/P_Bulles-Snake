@@ -107,8 +107,6 @@ function StopGame() {
     document.getElementById("BestTimerDisplay").textContent = BestTimer;
     document.cookie = `BestTimer=${BestTimer};`
     document.cookie = `BestScore=${BestScore};`
-   
-    console.log(document.cookie)
   }
   // Met à jour le meilleur timer si le timer actuel est supérieur
   else if (DurationGame > BestTimer && score === BestScore) {
