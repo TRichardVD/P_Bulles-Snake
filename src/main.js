@@ -196,16 +196,12 @@ function StopGame() {
  */
 function draw() {  
 
+  // Mettre à jour la date de dernier raffraichiseement
   DateOfLastRefresh = Date.now();
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+  // Faire avancé le serpent
   const newHead = moveSnake(snake, direction, box);
-
   snake.unshift(newHead);
-
-  // Supprime le dernier segment du serpent
-  // TODO - à mettre à jour lorsque l'on va gérer la nourriture
   snake.pop();
 
   // Vérifie si le serpent est entré en collision avec lui-même ou avec un mur puis arrête le jeu
@@ -228,6 +224,9 @@ function draw() {
       snake.push({x: snake[snake.length - 1].x, 
                   y: snake[snake.length - 1].y})
     }
+
+    // Effacer plateau de jeu actuel
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Afficher les objets
     drawSnake(ctx, snake, box);
