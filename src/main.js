@@ -2,7 +2,7 @@ import { initSnake, moveSnake, drawSnake } from "./snake.js";
 import { generateFood, drawFood } from "./food.js";
 import { handleDirectionChange } from "./controls.js";
 import { checkCollision, checkWallCollision } from "./collision.js";
-import { drawScore, RefreshScore, ScoreboardData} from "./score.js";
+import { drawScore, RefreshScore, ScoreboardData, drawTimer} from "./score.js";
 import { API_URL, API_TOKEN } from './config.js';
 import defaultConfig from '../config.json';
 
@@ -233,6 +233,7 @@ function draw() {
     drawSnake(ctx, snake, box);
     drawFood(ctx, food, box);
     drawScore(ctx, score);
+    drawTimer(ctx, Math.floor((Date.now() - DateOfStart)/1000), canvas)
   
 }
 

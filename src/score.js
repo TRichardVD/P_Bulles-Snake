@@ -15,6 +15,26 @@ function drawScore(ctx, score) {
   ctx.fillText(`Score : ${score}`, 10, 30)
 }
 
+/**
+ * Dessine le score sur le canvas.
+ *
+ * Cette fonction affiche la durée actuelle de la partie dans le coin supérieur droite du canvas.
+ * Le score est affiché en noir avec une police Arial de 20px.
+ *
+ * @param {CanvasRenderingContext2D} ctx - Le contexte de rendu 2D du canvas utilisé pour dessiner.
+ * @param {number} timer - La durée en seconde de la partie
+ * @param {HTMLCanvasElement} canvas - L'élément canvas représentant la surface de jeu.
+ */
+function drawTimer(ctx, timer, canvas) {
+  const text = `${timer}s`
+
+  ctx.font = "20px Arial"
+  ctx.fillStyle = "black"
+  ctx.fillText(text, canvas.width - ctx.measureText(text).width - 8, 30)
+}
+
+
+// Données du scoreboard
 let ScoreboardData = [];
 
 /**
@@ -85,5 +105,6 @@ function RefreshScore(bestScore, bestTime) {
 export {
   drawScore,
   RefreshScore,
-  ScoreboardData
+  ScoreboardData,
+  drawTimer
 }
