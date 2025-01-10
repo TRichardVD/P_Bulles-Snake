@@ -10,9 +10,12 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 // Variables du jeu
-let box = 20;               // Taille d'une case en pixels
+let box = 20;               // Taille d'une case en pixels pour la partie actuelle
+let newBox = 20;            // Prochaine taille d'une case en pixel
+
 let gameSpeed = 200;          // Vitesse du jeu en ms
 let newSpeed = 200;           // Nouvelle vitesse du jeu en ms afin d'éviter le changement de vitesse en cours de jeu ce qui est de la triche
+
 let snake;                    // Serpent du jeu
 let food;                     // Nourriture du jeu
 let direction = "RIGHT";      // Direction du serpent
@@ -41,7 +44,7 @@ let currentMenuBgColor = '#adff2f';  // couleur menu par défaut
  * Fonction pour charger les 
  */
 async function LoadDeafaultSettings() {
-  box = defaultConfig.boxSize;
+  newBox = defaultConfig.boxSize;
   newSpeed = defaultConfig.gameSpeed;
 
   currentBgColor = defaultConfig.BgColor;
@@ -61,6 +64,7 @@ function startGame()
 {
   // Réinitialisation des variables
   gameSpeed = newSpeed;
+  box = newBox;
   score = 0;
   direction = "RIGHT"
 
@@ -327,8 +331,12 @@ document.getElementById("buttonSettings").onclick = () => {
     Scoreboard.style.display = 'none'
   }
 
+  // Cacher les erreurs
   document.getElementById("GamespeedErrorSetting").style.display = "none"
+  document.getElementById("BoxSizeErrorSetting").style.display = "none";
 
+  // Mettre à jour les valeurs des champs du formulaire
+  document.getElementById("BoxSizeSet").value = newBox;
   document.getElementById("GamespeedSet").value = newSpeed;
   document.getElementById("backgroundColorSet").value = currentBgColor;
   document.getElementById("ColorBgMenuSet").value = currentMenuBgColor;
@@ -337,9 +345,18 @@ document.getElementById("buttonSettings").onclick = () => {
 
 document.getElementById("SaveSettings").onclick = () => {
 
-  if (document.getElementById("GamespeedSet").value <= 20 || document.getElementById("GamespeedSet").value >= 1000)
+  // Vérification de la valeur de gamespeed
+  const nextGameSpeed = document.getElementById("GamespeedSet").value;
+  if (nextGameSpeed <= 20 || nextGameSpeed >= 1000)
   {
-  document.getElementById("GamespeedErrorSetting").style.display = "block";
+    document.getElementById("GamespeedErrorSetting").style.display = "block";
+    return;
+  }
+
+  // Vérification de la valeur de boxsize
+  const nextBoxSize = document.getElementById("BoxSizeSet").value;
+  if (nextBoxSize <= 0 || nextBoxSize > 100) {
+    document.getElementById("BoxSizeErrorSetting").style.display = "block";
     return;
   }
 
@@ -348,9 +365,12 @@ document.getElementById("SaveSettings").onclick = () => {
   currentBgColor = document.getElementById("backgroundColorSet").value;
   document.getElementsByTagName("body")[0].style.backgroundColor = document.getElementById("backgroundColorSet").value;
 
-  document.getElementById("settings").style.backgroundColor = document.getElementById("ColorBgMenuSet").value;
-  document.getElementById("menuPause").style.backgroundColor = document.getElementById("ColorBgMenuSet").value;
-  document.getElementById("scoreBoard").style.backgroundColor = document.getElementById("ColorBgMenuSet").value;
+  newBox = document.getElementById("BoxSizeSet").value;
+
+  for (const element of document.getElementsByClassName("menu"))
+  {
+    element.style.backgroundColor = currentMenuBgColor
+  }
 
   document.getElementById("settings").style.display = 'none';
   if (gameIsInProgress) {
@@ -362,7 +382,9 @@ document.getElementById("ResetSettings").onclick = () => {
 
   LoadDeafaultSettings();
 
-  document.getElementById("GamespeedSet").value = gameSpeed;
+  document.getElementById("BoxSizeSet").value = newBox
+
+  document.getElementById("GamespeedSet").value = newSpeed;
 
   document.getElementById("backgroundColorSet").value = currentBgColor;
 
