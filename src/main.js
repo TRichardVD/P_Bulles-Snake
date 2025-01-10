@@ -10,12 +10,8 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 // Variables du jeu
-let box = 20;               // Taille d'une case en pixels pour la partie actuelle
-let newBox = 20;            // Prochaine taille d'une case en pixel
-
+let box = 20;                 // Taille d'une case en pixels pour la partie actuelle
 let gameSpeed = 200;          // Vitesse du jeu en ms
-let newSpeed = 200;           // Nouvelle vitesse du jeu en ms afin d'éviter le changement de vitesse en cours de jeu ce qui est de la triche
-
 let snake;                    // Serpent du jeu
 let food;                     // Nourriture du jeu
 let direction = "RIGHT";      // Direction du serpent
@@ -34,28 +30,43 @@ let BestTimer = 0;            // Meilleur temps pour le meilleur score
 let DurationBreak = 0;        // Durée de la pause en secondes
 let DateOfLastSnakeTurn = Date.now(); // Date du dernier tour du serpent
 
-// Variables de style
-let currentBgColor = '#008000';      // couleur de fond par défaut
-let currentMenuBgColor = '#adff2f';  // couleur menu par défaut
+// Paramètres utilisateur
+let currentSettings = {
+  "BgColor" : "#008000",      // couleur de fond par défaut
+  "MenuBgColor" : '#adff2f',  // couleur menu par défaut
+  "BoxSize" : 20,             // Nouvelle vitesse du jeu en ms afin d'éviter le changement de vitesse en cours de jeu ce qui est de la triche
+  "GameSpeed" : 200           // Prochaine taille d'une case en pixel
+}
 
 // Fonctions pour le jeu
 
 /**
- * Fonction pour charger les 
+ * Fonction pour charger les paramètres par défaut
+ * 
+ * @async
  */
 async function LoadDeafaultSettings() {
-  newBox = defaultConfig.boxSize;
-  newSpeed = defaultConfig.gameSpeed;
+  currentSettings.BoxSize = defaultConfig.boxSize;
+  currentSettings.GameSpeed = defaultConfig.gameSpeed;
 
-  currentBgColor = defaultConfig.BgColor;
-  document.getElementsByTagName("body")[0].style.backgroundColor = currentBgColor;
+  currentSettings.BgColor = defaultConfig.BgColor;
 
-  currentMenuBgColor = defaultConfig.MenuBgColor;
-  for (const element of document.getElementsByClassName("menu"))
-  {
-    element.style.backgroundColor = currentMenuBgColor
+  currentSettings.MenuBgColor = defaultConfig.MenuBgColor;
+}
+
+/**
+ * Appliquer les paramètres de l'utilisateur dans les styles par exemple
+ * 
+ * @async
+ */
+async function ApplySettings() {
+  document.getElementsByTagName("body")[0].style.backgroundColor = currentSettings.BgColor;
+
+  for (const element of document.getElementsByClassName("menu")) {
+    element.style.backgroundColor = currentSettings.MenuBgColor
   }
 }
+
 
 /**
  * Fonciton pour démarrer le jeu
@@ -63,8 +74,8 @@ async function LoadDeafaultSettings() {
 function startGame() 
 {
   // Réinitialisation des variables
-  gameSpeed = newSpeed;
-  box = newBox;
+  gameSpeed = currentSettings.GameSpeed;
+  box = currentSettings.BoxSize;
   score = 0;
   direction = "RIGHT"
 
@@ -99,21 +110,21 @@ function StopGame() {
   // Met à jour la durée de la partie
   DurationGame = Math.floor((Date.now() - DateOfStart)/1000)
 
+  const MaxAgeCookie = 365 * 24 * 60 * 60;
+
   // Met à jour le meilleur score si le score actuel est supérieur
   if (score > BestScore) {
     BestScore = score;
     BestTimer = DurationGame;
     document.getElementById("BestScoreDisplay").textContent = BestScore;
     document.getElementById("BestTimerDisplay").textContent = BestTimer;
-    document.cookie = `BestTimer=${BestTimer};`
-    document.cookie = `BestScore=${BestScore};`
+    document.cookie = `BestTimer=${BestTimer}; Max-Age=${MaxAgeCookie}; Path=/`
+    document.cookie = `BestScore=${BestScore}; Max-Age=${MaxAgeCookie}; Path=/`
   }
   // Met à jour le meilleur timer si le timer actuel est supérieur
   else if (DurationGame > BestTimer && score === BestScore) {
     BestTimer = DurationGame;
     document.getElementById("BestTimerDisplay").textContent = BestTimer;
-
-    const MaxAgeCookie = 365 * 24 * 60 * 60;
     document.cookie = `BestTimer=${BestTimer}; Max-Age=${MaxAgeCookie}; Path=/`;
     document.cookie = `BestScore=${BestScore}; Max-Age=${MaxAgeCookie} Path=/`
   }
@@ -319,7 +330,6 @@ document.getElementById("buttonSettings").onclick = () => {
     ToPause();
   }
 
-
   const Scoreboard = document.getElementById("settings");
   const display = Scoreboard.style.display;
   if (display === 'none' || display === 'None' || display === '') {
@@ -334,10 +344,10 @@ document.getElementById("buttonSettings").onclick = () => {
   document.getElementById("BoxSizeErrorSetting").style.display = "none";
 
   // Mettre à jour les valeurs des champs du formulaire
-  document.getElementById("BoxSizeSet").value = newBox;
-  document.getElementById("GamespeedSet").value = newSpeed;
-  document.getElementById("backgroundColorSet").value = currentBgColor;
-  document.getElementById("ColorBgMenuSet").value = currentMenuBgColor;
+  document.getElementById("BoxSizeSet").value = currentSettings.BoxSize;
+  document.getElementById("GamespeedSet").value = currentSettings.GameSpeed;
+  document.getElementById("backgroundColorSet").value = currentSettings.BgColor ;
+  document.getElementById("ColorBgMenuSet").value = currentSettings.MenuBgColor;
 
 }
 
@@ -358,38 +368,40 @@ document.getElementById("SaveSettings").onclick = () => {
     return;
   }
 
-  newSpeed = document.getElementById("GamespeedSet").value;
+  currentSettings.GameSpeed = document.getElementById("GamespeedSet").value;
 
-  currentBgColor = document.getElementById("backgroundColorSet").value;
-  document.getElementsByTagName("body")[0].style.backgroundColor = document.getElementById("backgroundColorSet").value;
+  currentSettings.BgColor  = document.getElementById("backgroundColorSet").value;
 
-  newBox = document.getElementById("BoxSizeSet").value;
+  currentSettings.BoxSize = document.getElementById("BoxSizeSet").value;
 
-  currentMenuBgColor = document.getElementById("ColorBgMenuSet").value;
-  for (const element of document.getElementsByClassName("menu"))
-  {
-    element.style.backgroundColor = currentMenuBgColor
-  }
+  currentSettings.MenuBgColor = document.getElementById("ColorBgMenuSet").value;
 
   document.getElementById("settings").style.display = 'none';
+
   if (gameIsInProgress) {
     RestartGame();
   }
+
+  document.cookie = `UserSettings=${JSON.stringify(currentSettings)}; Max-Age=${365 * 24 * 60 * 60}; Path=/`
+
+  ApplySettings();
 }
 
 document.getElementById("ResetSettings").onclick = () => {
 
   LoadDeafaultSettings();
 
-  document.getElementById("BoxSizeSet").value = newBox
+  document.getElementById("BoxSizeSet").value = currentSettings.BoxSize
 
-  document.getElementById("GamespeedSet").value = newSpeed;
+  document.getElementById("GamespeedSet").value = currentSettings.GameSpeed;
 
-  document.getElementById("backgroundColorSet").value = currentBgColor;
+  document.getElementById("backgroundColorSet").value = currentSettings.BgColor ;
 
-  document.getElementById("ColorBgMenuSet").value = currentMenuBgColor;
+  document.getElementById("ColorBgMenuSet").value = currentSettings.MenuBgColor;
 
+  ApplySettings();
 
+  document.cookie = `UserSettings=${JSON.stringify(currentSettings)}; Max-Age=${365 * 24 * 60 * 60}; Path=/`
 }
 
 document.getElementById("buttonScoreboard").onclick = () => {
@@ -428,7 +440,14 @@ if (document.cookie.includes("BestScore")) {
     BestTimer = bestTimerCookie.split("=")[1];
     document.getElementById("BestTimerDisplay").textContent = BestTimer
   }
+  
+  const UserSettingsCookie = cookies.find(cookie => cookie.startsWith("UserSettings="))
+  if (UserSettingsCookie) {
+    currentSettings = JSON.parse(UserSettingsCookie.split("=")[1])
+  }
 }
+
+await ApplySettings();
 
 // Rafraichissement du score toutes les minutes
 RefreshScore(BestScore, BestTimer);
