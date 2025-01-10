@@ -365,6 +365,7 @@ document.getElementById("SaveSettings").onclick = () => {
 
   newBox = document.getElementById("BoxSizeSet").value;
 
+  currentMenuBgColor = document.getElementById("ColorBgMenuSet").value;
   for (const element of document.getElementsByClassName("menu"))
   {
     element.style.backgroundColor = currentMenuBgColor
